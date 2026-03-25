@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Oração"/>
+  <meta name="theme-color" content="#FFFFFF"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icone.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="icone.png"/>
+  <title>Pedidos de Oração</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root{
+      --bg:#F8F8FA;
+      --white:#FFFFFF;
+      --text:#1A1D26;
+      --text2:#6E7280;
+      --text3:#A0A5B2;
+      --border:#EEEFF2;
+      --sage:#6A7765;
+      --navy:#3E495D;
+      --gold:#E2AF67;
+      --cream:#F4F0E7;
+      --r:14px;
+      --rr:50px;
+    }
+
+    body{
+      font-family:'Inter',system-ui,-apple-system,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      padding-bottom:90px;
+    }
+
+    /* ── HEADER ── */
+    .hdr{
+      background:var(--white);
+      padding:48px 20px 18px;
+      border-bottom:1px solid var(--border);
+    }
+    .hdr-inner{max-width:600px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between}
+    .hdr h1{
+      font-size:24px;
+      font-weight:800;
+      color:var(--text);
+      letter-spacing:-0.8px;
+    }
+    .hdr-sub{
+      font-size:11px;
+      color:var(--text3);
+      font-weight:500;
+      margin-top:2px;
+    }
+    .hdr-title-row{display:flex;align-items:center;gap:10px}
+    .hdr-logo{width:22px;height:auto;flex-shrink:0;opacity:0.55}
+
+    /* Lock button */
+    .lock-btn{
+      background:var(--bg);
+      border:1.5px solid var(--border);
+      width:38px;height:38px;
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      font-size:16px;
+      transition:all .2s;
+      flex-shrink:0;
+      margin-top:2px;
+    }
+    .lock-btn:hover{background:var(--border)}
+    .lock-btn svg{width:16px;height:16px}
+    .lock-btn.unlocked{
+      background:rgba(106,119,101,.1);
+      border-color:var(--sage);
+    }
+
+    /* Stats */
+    .stats{
+      display:flex;
+      gap:6px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+    .st{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      padding:6px 12px;
+      border-radius:var(--rr);
+      background:var(--bg);
+      font-size:11px;
+      font-weight:600;
+    }
+    .st .num{font-weight:800}
+    .st-total .num{color:var(--navy)}
+    .st-pend .num{color:var(--gold)}
+    .st-done .num{color:var(--sage)}
+    .st .lbl{color:var(--text2);font-weight:500}
+
+    /* ── CONTAINER ── */
+    .cnt{max-width:600px;margin:0 auto;padding:14px 16px 0}
+
+    /* Search */
+    .search-row{display:flex;gap:8px;margin-bottom:12px}
+    .search-box{flex:1;position:relative}
+    .search-box svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3)}
+    .search-box input{
+      width:100%;padding:10px 12px 10px 38px;
+      border-radius:var(--r);border:1.5px solid var(--border);
+      font-family:inherit;font-size:13px;color:var(--text);
+      background:var(--white);outline:none;transition:border .2s;
+    }
+    .search-box input:focus{border-color:var(--navy)}
+    .search-box input::placeholder{color:var(--text3)}
+
+    /* Filters */
+    .filters{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap}
+    .f-pill{
+      padding:7px 13px;border-radius:var(--rr);
+      border:1.5px solid var(--border);background:var(--white);
+      font-family:inherit;font-size:11px;font-weight:600;
+      color:var(--text2);cursor:pointer;transition:all .2s;
+    }
+    .f-pill.on{background:var(--text);border-color:var(--text);color:var(--white)}
+
+    /* Categories */
+    .cats{
+      display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;padding-bottom:4px;margin-bottom:16px;
+    }
+    .cats::-webkit-scrollbar{display:none}
+    .cat{
+      padding:6px 12px;border-radius:var(--rr);
+      border:1.5px solid var(--border);background:var(--white);
+      font-family:inherit;font-size:10px;font-weight:600;
+      color:var(--text2);cursor:pointer;transition:all .2s;
+      white-space:nowrap;flex-shrink:0;
+      display:flex;align-items:center;gap:4px;
+    }
+    .cat .ci{font-size:12px;display:flex;align-items:center}
+    .cat .ci svg{width:14px;height:14px}
+    .cat .cn{
+      font-size:9px;font-weight:700;
+      background:var(--bg);padding:1px 5px;border-radius:10px;color:var(--text3);
+    }
+    .cat.on{background:var(--navy);border-color:var(--navy);color:#fff}
+    .cat.on .cn{background:rgba(255,255,255,.2);color:#fff}
+
+    /* Section label */
+    .sec{display:none;align-items:center;gap:6px;margin-bottom:10px;padding-left:2px}
+    .sec.vis{display:flex}
+    .sec h2{font-size:14px;font-weight:700;color:var(--text)}
+    .sec .sc{font-size:11px;font-weight:500;color:var(--text3)}
+
+    /* ── LIST ── */
+    .list{display:flex;flex-direction:column;gap:0}
+
+    .item{
+      display:flex;align-items:center;gap:12px;
+      padding:14px;background:var(--white);
+      border-bottom:1px solid var(--border);
+      cursor:pointer;transition:background .15s;
+    }
+    .item:first-child{border-radius:var(--r) var(--r) 0 0}
+    .item:last-child{border-radius:0 0 var(--r) var(--r);border-bottom:none}
+    .item:only-child{border-radius:var(--r)}
+    .item:hover{background:#FAFAFE}
+    .item.fin{background:#FAFDF8}
+
+    .ic{
+      width:38px;height:38px;min-width:38px;
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-size:16px;background:var(--bg);border:1.5px solid var(--border);
+      transition:all .2s;
+    }
+    .ic svg{width:18px;height:18px;color:var(--text2)}
+    .item.fin .ic{background:#EBF5E6;border-color:#D0E5C8}
+
+    .item-body{flex:1;min-width:0}
+    .item-text{
+      font-size:13px;font-weight:600;color:var(--text);
+      line-height:1.4;display:-webkit-box;
+      -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    }
+    .item.fin .item-text{color:var(--text3);text-decoration:line-through}
+    .item-cats{
+      font-size:10px;font-weight:500;color:var(--text3);margin-top:2px;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+
+    .item-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+    .chk{
+      width:24px;height:24px;min-width:24px;border-radius:50%;
+      border:2px solid var(--border);background:transparent;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      font-size:12px;color:transparent;transition:all .2s;padding:0;
+    }
+    .chk.on{border-color:var(--sage);background:var(--sage);color:#fff}
+    /* locked state */
+    .locked .chk{opacity:.4;pointer-events:none}
+
+    .dbtn{
+      background:none;border:none;cursor:pointer;
+      color:var(--text3);font-size:16px;padding:2px;
+      border-radius:6px;transition:all .15s;line-height:1;opacity:0;
+    }
+    .item:hover .dbtn{opacity:1}
+    .dbtn:hover{color:#D64545;background:#FDE8E8}
+    .locked .dbtn{display:none}
+
+    /* Expanded */
+    .item-detail{
+      display:none;padding:12px 0 0;margin-top:12px;
+      border-top:1px solid var(--border);
+    }
+    .item.open .item-detail{display:block}
+    .item.open .item-text{-webkit-line-clamp:unset}
+
+    .dg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .di-l{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:1px}
+    .di-v{font-size:11px;font-weight:500;color:var(--text)}
+    .di-v.em{color:var(--text3);font-style:italic;font-weight:400}
+    .di-v.act{color:var(--gold);font-weight:700}
+    .di-v.dn{color:var(--sage);font-weight:700}
+    .di.fw{grid-column:1/-1}
+
+    .badges-exp{display:flex;flex-wrap:wrap;gap:3px;margin-top:8px}
+    .bx{font-size:9px;font-weight:600;padding:2px 8px;border-radius:var(--rr);white-space:nowrap}
+
+    /* Empty */
+    .empty{text-align:center;padding:44px 20px;color:var(--text3)}
+    .empty .ei{font-size:32px;margin-bottom:8px}
+    .empty .ei svg{width:32px;height:32px;color:var(--text3)}
+    .empty p{font-size:13px;font-weight:500}
+
+    /* ── FAB ── */
+    .fab{
+      position:fixed;bottom:24px;right:18px;
+      width:52px;height:52px;border-radius:50%;
+      background:var(--navy);color:#fff;border:none;
+      font-size:26px;font-weight:300;cursor:pointer;
+      box-shadow:0 4px 20px rgba(62,73,93,.3);
+      z-index:200;display:flex;align-items:center;justify-content:center;
+      transition:all .2s;line-height:1;
+    }
+    .fab:hover{transform:scale(1.06)}
+    .fab:active{transform:scale(.94)}
+    .fab.locked-fab{opacity:.35;pointer-events:none}
+
+    /* ── MODALS ── */
+    .ov{
+      display:none;position:fixed;inset:0;
+      background:rgba(26,29,38,.35);
+      backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+      z-index:300;align-items:flex-end;justify-content:center;
+    }
+    .ov.open{display:flex}
+    .modal{
+      background:var(--white);border-radius:20px 20px 0 0;
+      padding:6px 20px 34px;width:100%;max-width:520px;
+      max-height:92vh;overflow-y:auto;
+      animation:su .3s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .mh{width:36px;height:4px;border-radius:4px;background:var(--border);margin:8px auto 16px}
+    .mt{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .mt h3{font-size:16px;font-weight:700;color:var(--text)}
+    .mx{
+      background:var(--bg);border:none;width:30px;height:30px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:14px;color:var(--text2);cursor:pointer;transition:background .15s;
+    }
+    .mx:hover{background:var(--border)}
+
+    .fg{margin-bottom:12px}
+    .fg-l{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);margin-bottom:4px}
+    .fg-i,.fg-t{
+      width:100%;padding:10px 12px;border-radius:10px;
+      border:1.5px solid var(--border);font-family:inherit;
+      font-size:12px;color:var(--text);background:var(--bg);
+      outline:none;transition:border .2s;
+    }
+    .fg-i:focus,.fg-t:focus{border-color:var(--navy)}
+    .fg-t{resize:vertical;min-height:70px;line-height:1.6}
+    .fg-i::placeholder,.fg-t::placeholder{color:var(--text3)}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+    .cs{display:flex;flex-wrap:wrap;gap:4px}
+    .cs-i{
+      display:inline-flex;align-items:center;gap:3px;
+      font-family:inherit;font-size:10px;font-weight:600;
+      padding:5px 10px;border-radius:var(--rr);
+      cursor:pointer;border:1.5px solid var(--border);
+      background:var(--white);color:var(--text2);
+      transition:all .2s;user-select:none;
+    }
+    .cs-i.sel{border-color:var(--navy);background:rgba(62,73,93,.08);color:var(--navy)}
+    .cs-i input{display:none}
+
+    .btn-go{
+      width:100%;padding:13px;border-radius:var(--rr);border:none;
+      background:var(--navy);color:#fff;font-family:inherit;
+      font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:4px;
+    }
+    .btn-go:hover{background:#333E50}
+
+    /* Center overlay modals */
+    .cov{
+      display:none;position:fixed;inset:0;
+      background:rgba(26,29,38,.35);backdrop-filter:blur(4px);
+      z-index:400;align-items:center;justify-content:center;
+    }
+    .cov.open{display:flex}
+    .cbox{
+      background:var(--white);border-radius:18px;
+      padding:26px 22px 22px;width:90%;max-width:340px;
+      text-align:center;animation:pp .2s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes pp{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+    .cbox p{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+    .cbox small{display:block;font-size:11px;color:var(--text3);font-style:italic;margin-bottom:18px;line-height:1.4}
+    .ca{display:flex;gap:8px}
+    .ca button{
+      flex:1;padding:11px;border-radius:var(--rr);border:none;
+      font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;
+    }
+    .ca-c{background:var(--bg);color:var(--text)}
+    .ca-c:hover{background:var(--border)}
+    .ca-d{background:#E74C3C;color:#fff}
+    .ca-d:hover{background:#C0392B}
+
+    /* Password modal */
+    .pw-box{
+      background:var(--white);border-radius:18px;
+      padding:28px 24px 24px;width:90%;max-width:320px;
+      text-align:center;animation:pp .2s cubic-bezier(.16,1,.3,1);
+    }
+    .pw-box .pw-icon{font-size:32px;margin-bottom:10px}
+    .pw-box .pw-icon svg{width:32px;height:32px;color:var(--sage)}
+    .pw-box p{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+    .pw-box .pw-hint{font-size:11px;color:var(--text3);margin-bottom:16px}
+    .pw-input{
+      width:100%;padding:12px 14px;border-radius:10px;
+      border:1.5px solid var(--border);font-family:inherit;
+      font-size:14px;color:var(--text);background:var(--bg);
+      outline:none;text-align:center;letter-spacing:2px;
+      transition:border .2s;
+    }
+    .pw-input:focus{border-color:var(--navy)}
+    .pw-input.error{border-color:#E74C3C;animation:shake .4s}
+    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+    .pw-error{font-size:11px;color:#E74C3C;font-weight:600;margin-top:8px;min-height:16px}
+    .pw-actions{display:flex;gap:8px;margin-top:14px}
+    .pw-actions button{
+      flex:1;padding:11px;border-radius:var(--rr);border:none;
+      font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;
+    }
+    .pw-cancel{background:var(--bg);color:var(--text)}
+    .pw-cancel:hover{background:var(--border)}
+    .pw-ok{background:var(--navy);color:#fff}
+    .pw-ok:hover{background:#333E50}
+
+    /* Footer */
+    .fv{
+      margin-top:32px;text-align:center;
+      color:#D0CEC8;font-size:11px;font-style:italic;
+      line-height:1.7;padding:0 20px 20px;
+    }
+    .fv .ref{display:block;margin-top:3px;font-style:normal;font-weight:600;font-size:9px;color:#DDD9D0}
+
+    /* ── INSTALL BANNER ── */
+    .install-bar{
+      display:none;
+      position:fixed;bottom:0;left:0;right:0;
+      background:var(--white);
+      border-top:1px solid var(--border);
+      padding:14px 20px;
+      z-index:250;
+      align-items:center;
+      gap:12px;
+      box-shadow:0 -4px 20px rgba(26,29,38,.06);
+      max-width:600px;
+      margin:0 auto;
+    }
+    .install-bar.show{display:flex}
+    .install-bar .ib-icon{font-size:28px;flex-shrink:0}
+    .install-bar .ib-icon svg{width:28px;height:28px;color:var(--sage)}
+    .install-bar .ib-text{flex:1;min-width:0}
+    .install-bar .ib-title{font-size:13px;font-weight:700;color:var(--text)}
+    .install-bar .ib-sub{font-size:11px;color:var(--text3);margin-top:1px}
+    .install-bar .ib-btn{
+      padding:9px 16px;border-radius:var(--rr);border:none;
+      background:var(--navy);color:#fff;
+      font-family:inherit;font-size:12px;font-weight:600;
+      cursor:pointer;white-space:nowrap;flex-shrink:0;
+      transition:all .2s;
+    }
+    .install-bar .ib-btn:hover{background:#333E50}
+    .install-bar .ib-close{
+      background:none;border:none;cursor:pointer;
+      color:var(--text3);font-size:18px;padding:2px;
+      line-height:1;flex-shrink:0;
+    }
+
+    /* iOS install modal */
+    .ios-modal{
+      display:none;position:fixed;inset:0;
+      background:rgba(26,29,38,.4);
+      backdrop-filter:blur(4px);z-index:500;
+      align-items:flex-end;justify-content:center;
+    }
+    .ios-modal.open{display:flex}
+    .ios-box{
+      background:var(--white);border-radius:20px 20px 0 0;
+      padding:8px 24px 36px;width:100%;max-width:520px;
+      animation:su .3s cubic-bezier(.16,1,.3,1);
+    }
+    .ios-handle{width:36px;height:4px;border-radius:4px;background:var(--border);margin:8px auto 18px}
+    .ios-box h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+    .ios-box .ios-sub{font-size:12px;color:var(--text3);margin-bottom:20px}
+    .ios-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+    .ios-step .is-num{
+      width:24px;height:24px;min-width:24px;border-radius:50%;
+      background:var(--navy);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:11px;font-weight:700;margin-top:1px;
+    }
+    .ios-step .is-text{font-size:13px;color:var(--text);line-height:1.5}
+    .ios-step .is-text strong{font-weight:700}
+    .ios-step .is-text .is-icon{font-size:16px;vertical-align:middle}
+    .ios-close{
+      width:100%;padding:13px;border-radius:var(--rr);border:none;
+      background:var(--bg);color:var(--text);font-family:inherit;
+      font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;
+      transition:all .2s;
+    }
+    .ios-close:hover{background:var(--border)}
+
+    @media(max-width:480px){
+      .hdr{padding:40px 16px 14px}
+      .hdr h1{font-size:20px}
+      .item{padding:12px 12px;gap:10px}
+      .ic{width:34px;height:34px;min-width:34px;font-size:14px}
+      .item-text{font-size:12px}
+      .item-cats{font-size:9px}
+      .fab{width:48px;height:48px;font-size:22px;bottom:18px;right:14px}
+      .dg{grid-template-columns:1fr}
+      .dbtn{opacity:1}
+      .st{padding:5px 9px;font-size:10px}
+      .f-pill{padding:6px 10px;font-size:10px}
+      .cat{padding:5px 9px;font-size:9px}
+      .cat .ci{font-size:11px}
+      .cat .cn{font-size:8px}
+    }
+  </style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <div class="hdr-title-row">
+        <svg class="hdr-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 287.37 400"><path fill="#231f20" d="M281.79,0l-139.8,141.99L0,70.99,281.79,0ZM170,400l-21.73-249.95,53.04-53.87L287.37,8.78l-117.36,391.22Z"/></svg>
+        <div>
+          <h1>Pedidos de Oração</h1>
+          <div class="hdr-sub">Intercessão da Vértice</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="st st-total"><span class="num" id="sT">0</span><span class="lbl">pedidos</span></div>
+        <div class="st st-pend"><span class="num" id="sP">0</span><span class="lbl">orando</span></div>
+        <div class="st st-done"><span class="num" id="sD">0</span><span class="lbl">finalizados</span></div>
+      </div>
+    </div>
+    <button class="lock-btn" id="lockBtn" title="Desbloquear edição"><i data-lucide="lock"></i></button>
+  </div>
+</header>
+
+<div class="cnt">
+  <div class="search-row">
+    <div class="search-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Buscar por nome ou palavra-chave..." id="sI"/>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="f-pill on" data-f="all">Todos</button>
+    <button class="f-pill" data-f="pending">Orando</button>
+    <button class="f-pill" data-f="done">Finalizados</button>
+  </div>
+
+  <div class="cats" id="cR"></div>
+  <div class="sec" id="sH"><span class="ci"></span><h2></h2><span class="sc"></span></div>
+  <div class="list" id="lE"></div>
+
+  <div class="fv">
+    "Não andem ansiosos por coisa alguma, mas em tudo, pela oração e súplicas, com ação de graças, apresentem seus pedidos a Deus."
+    <span class="ref">Filipenses 4:6</span>
+  </div>
+</div>
+
+<button class="fab locked-fab" id="fab">+</button>
+
+<!-- Install banner -->
+<div class="install-bar" id="installBar">
+  <div class="ib-icon"><i data-lucide="hand-heart"></i></div>
+  <div class="ib-text">
+    <div class="ib-title">Adicionar à tela inicial</div>
+    <div class="ib-sub">Acesse como um app, sem navegador</div>
+  </div>
+  <button class="ib-btn" id="installBtn">Instalar</button>
+  <button class="ib-close" id="installClose">✕</button>
+</div>
+
+<!-- iOS install instructions -->
+<div class="ios-modal" id="iosModal">
+  <div class="ios-box">
+    <div class="ios-handle"></div>
+    <h3>Adicionar à tela inicial</h3>
+    <div class="ios-sub">Siga os passos abaixo no Safari</div>
+    <div class="ios-step">
+      <div class="is-num">1</div>
+      <div class="is-text">Toque no botão de compartilhar <span class="is-icon">⬆️</span> na barra inferior do Safari</div>
+    </div>
+    <div class="ios-step">
+      <div class="is-num">2</div>
+      <div class="is-text">Role para baixo e toque em <strong>"Adicionar à Tela de Início"</strong></div>
+    </div>
+    <div class="ios-step">
+      <div class="is-num">3</div>
+      <div class="is-text">Toque em <strong>"Adicionar"</strong> no canto superior direito</div>
+    </div>
+    <button class="ios-close" id="iosClose">Entendido</button>
+  </div>
+</div>
+
+<!-- Add modal -->
+<div class="ov" id="aO">
+  <div class="modal">
+    <div class="mh"></div>
+    <div class="mt"><h3>Novo pedido</h3><button class="mx" id="mX">✕</button></div>
+    <form id="aF">
+      <div class="fg">
+        <label class="fg-l">Pedido *</label>
+        <textarea class="fg-t" id="fT" placeholder="Descreva o pedido de oração..." required></textarea>
+      </div>
+      <div class="fg">
+        <label class="fg-l">Categorias *</label>
+        <div class="cs" id="fC"></div>
+      </div>
+      <div class="fg">
+        <label class="fg-l">Data do pedido</label>
+        <input class="fg-i" type="date" id="fD"/>
+      </div>
+      <div class="fg">
+        <label class="fg-l">Nome (opcional)</label>
+        <input class="fg-i" type="text" id="fN" placeholder="Nome da pessoa..."/>
+      </div>
+      <div class="fg-row">
+        <div class="fg">
+          <label class="fg-l">Telefone</label>
+          <input class="fg-i" type="tel" id="fP" placeholder="(00) 00000-0000"/>
+        </div>
+        <div class="fg">
+          <label class="fg-l">E-mail</label>
+          <input class="fg-i" type="email" id="fE" placeholder="email@exemplo.com"/>
+        </div>
+      </div>
+      <button type="submit" class="btn-go">Adicionar pedido</button>
+    </form>
+  </div>
+</div>
+
+<!-- Confirm delete -->
+<div class="cov" id="cO">
+  <div class="cbox">
+    <p>Excluir este pedido?</p>
+    <small id="cPv"></small>
+    <div class="ca">
+      <button class="ca-c" id="cC">Cancelar</button>
+      <button class="ca-d" id="cD">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- Password modal -->
+<div class="cov" id="pwO">
+  <div class="pw-box">
+    <div class="pw-icon"><i data-lucide="shield-check"></i></div>
+    <p>Área protegida</p>
+    <div class="pw-hint">Digite a senha para desbloquear</div>
+    <input type="password" class="pw-input" id="pwI" placeholder="••••••" autocomplete="off"/>
+    <div class="pw-error" id="pwErr"></div>
+    <div class="pw-actions">
+      <button class="pw-cancel" id="pwC">Cancelar</button>
+      <button class="pw-ok" id="pwOk">Desbloquear</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const C=[
+  {id:"todos",l:"Todos",i:"list",c:"#6A7765"},
+  {id:"familia",l:"Família e Casamento",i:"church",c:"#8B6914"},
+  {id:"salvacao",l:"Salvação",i:"cross",c:"#3E495D"},
+  {id:"cura_interior",l:"Cura Interior e Libertação",i:"bird",c:"#7C6A8A"},
+  {id:"direcao",l:"Direção e Mudanças",i:"compass",c:"#5A7A7A"},
+  {id:"maternidade",l:"Maternidade e Paternidade",i:"baby",c:"#B07A5B"},
+  {id:"cura",l:"Cura",i:"heart-pulse",c:"#9B4D4D"},
+  {id:"saude",l:"Saúde Física, Mental e Emocional",i:"brain",c:"#5B7A5E"},
+  {id:"outros",l:"Outros",i:"pin",c:"#7A7A7A"}
+];
+
+const DF=[
+  {id:1,t:"Uma pessoa de sexo feminino pede libertação do seu casamento ou transformação do seu marido, descrevendo-o como abusivo.",ct:["familia","cura_interior"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:2,t:"Uma pessoa pede que seu namorado, Gabriel, se batize, conheça mais a Cristo e O aceite em sua vida.",ct:["familia","salvacao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:3,t:"Uma pessoa pede que seu marido venha para Cristo e se renda ao Senhor.",ct:["familia","salvacao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:4,t:"David e Hallyne pedem oração por seu casamento.",ct:["familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:5,t:"Uma pessoa de sexo feminino pede que seu marido pare de fumar e se converta novamente.",ct:["familia","salvacao","cura_interior"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:6,t:"Uma pessoa de sexo feminino pede pela conversão completa de seu marido, Gabriel Costa.",ct:["familia","salvacao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:7,t:"Uma pessoa pede oração por um marido.",ct:["familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:8,t:"Uma pessoa pede que sua família experimente o amor de Cristo.",ct:["familia","salvacao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:9,t:"Mayene, Guilherme, Maya e Woody pedem mansidão e harmonia para sua família.",ct:["familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:10,t:"Uma pessoa pede a Deus pela conversão de Fábio.",ct:["salvacao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:11,t:"Uma pessoa pede pela salvação de Maês, Mirille e Thabata.",ct:["salvacao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:12,t:"Victória pede pela salvação de sua família.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:13,t:"Uma pessoa pede pela conversão de sua madrinha, irmã, tio e cunhado.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:14,t:"Uma pessoa pede pela salvação e libertação de Anna Beatriz, Victor Hugo, Irma e Tati.",ct:["salvacao","cura_interior"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:15,t:"Para que Jesus salve minha família.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:16,t:"Uma pessoa pede pela salvação de seu pai, de sua mãe e de seu irmão.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:17,t:"Uma pessoa pede pela salvação de sua outra filha.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:18,t:"Uma pessoa pede para salvação de Edenilson verdadeiramente.",ct:["salvacao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:19,t:"Uma pessoa pede pela salvação de seus irmãos.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:20,t:"Uma pessoa de sexo feminino pede pela verdadeira conversão de seu marido.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:21,t:"Uma pessoa pede pela conversão do irmão.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:22,t:"Uma pessoa pede pela conversão de seus filhos Gabriel e Júlia.",ct:["salvacao","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:23,t:"Uma pessoa pede que Ana Clara se renda aos pés de Jesus.",ct:["salvacao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:24,t:"Uma pessoa pede que Deus abençoe e console o coração da família de sua melhor amiga, que está de luto pela morte do pai.",ct:["cura_interior","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:25,t:"Uma pessoa pede libertação dos vícios de seu pai e por um 2026 verdadeiramente diferente para sua família.",ct:["cura_interior","familia","saude"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:26,t:"Uma pessoa pede oração pela transição para uma nova igreja, descrevendo esse processo como difícil.",ct:["direcao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:27,t:"Uma pessoa pede mudança de caráter espiritual.",ct:["direcao","cura_interior"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:28,t:"Uma pessoa pede que o Senhor abençoe sua mudança para o Japão e a acompanhe em seu chamado.",ct:["direcao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:29,t:"Uma pessoa de sexo feminino pede que a filha que está gerando venha com muita saúde e seja abençoada.",ct:["maternidade","saude"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:30,t:"Uma pessoa de sexo feminino pede saúde para seu esposo e que consigam engravidar.",ct:["maternidade","saude","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:31,t:"Uma pessoa pede que Deus abençoe o ventre de sua filha para que ela possa ter um filho.",ct:["maternidade","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:32,t:"Uma pessoa de sexo feminino deseja engravidar no próximo ano e pede que esse filho seja para o Senhor.",ct:["maternidade"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:33,t:"Uma pessoa pede que Deus guarde a vida de Serena, bebê acolhida por sua família, e que ela encontre seu caminho, mesmo longe deles.",ct:["maternidade","familia","direcao"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:34,t:"Uma pessoa pede cura do câncer para si e para seu pai.",ct:["cura","saude","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:35,t:"Uma pessoa pede pela alta completa de seu filho no tratamento psiquiátrico.",ct:["cura","saude","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:36,t:"Uma pessoa pede cura de câncer de Finha e Ingrid.",ct:["cura","saude"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:37,t:"Uma pessoa pede que Wagner busque ajuda psicológica.",ct:["saude","cura_interior"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false},
+  {id:38,t:"Uma pessoa pede pela cura e restauração da saúde de sua mãe, Marlene.",ct:["saude","cura","familia"],cn:null,cp:null,ce:null,dt:"2026-03-23",dn:false}
+];
+
+// ── STATE ──
+let D=[],ac="todos",sf="all",sq="",di=null,unlocked=false;
+const PASS="vertice";
+
+function sv(){try{localStorage.setItem("pv6",JSON.stringify(D))}catch(e){}}
+function ld(){try{const s=localStorage.getItem("pv6");if(s){D=JSON.parse(s);return}}catch(e){}D=JSON.parse(JSON.stringify(DF))}
+ld();
+function ni(){return D.length?Math.max(...D.map(r=>r.id))+1:1}
+function fd(d){if(!d)return"—";return new Date(d+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"})}
+function cc(id){return id==="todos"?D.length:D.filter(r=>r.ct.includes(id)).length}
+
+// ── LOCK ──
+function updateLockUI(){
+  const btn=document.getElementById("lockBtn");
+  const fab=document.getElementById("fab");
+  const list=document.getElementById("lE");
+  if(unlocked){
+    btn.innerHTML='<i data-lucide="lock-open"></i>';
+    btn.classList.add("unlocked");
+    btn.title="Bloquear edição";
+    fab.classList.remove("locked-fab");
+    list.classList.remove("locked");
+  } else {
+    btn.innerHTML='<i data-lucide="lock"></i>';
+    btn.classList.remove("unlocked");
+    btn.title="Desbloquear edição";
+    fab.classList.add("locked-fab");
+    list.classList.add("locked");
+  }
+  lucide.createIcons();
+}
+
+// ── RENDER ──
+function render(){
+  const tot=D.length,done=D.filter(r=>r.dn).length,pend=tot-done;
+  document.getElementById("sT").textContent=tot;
+  document.getElementById("sP").textContent=pend;
+  document.getElementById("sD").textContent=done;
+
+  document.getElementById("cR").innerHTML=C.map(c=>`<button class="cat${ac===c.id?" on":""}" data-c="${c.id}"><span class="ci"><i data-lucide="${c.i}"></i></span>${c.l}<span class="cn">${cc(c.id)}</span></button>`).join("");
+
+  const sh=document.getElementById("sH");
+  if(ac==="todos"){sh.classList.remove("vis")}else{
+    const cat=C.find(x=>x.id===ac);
+    sh.classList.add("vis");
+    sh.querySelector(".ci").innerHTML=`<i data-lucide="${cat.i}"></i>`;
+    sh.querySelector("h2").textContent=cat.l;
+    sh.querySelector(".sc").textContent=cc(cat.id)+" pedidos";
+  }
+
+  const f=D.filter(r=>{
+    if(ac!=="todos"&&!r.ct.includes(ac))return false;
+    if(sq&&!r.t.toLowerCase().includes(sq.toLowerCase()))return false;
+    if(sf==="pending"&&r.dn)return false;
+    if(sf==="done"&&!r.dn)return false;
+    return true;
+  });
+
+  const el=document.getElementById("lE");
+  if(!f.length){el.innerHTML=`<div class="empty"><div class="ei"><i data-lucide="hand-heart"></i></div><p>Nenhum pedido encontrado.</p></div>`;updateLockUI();lucide.createIcons();return}
+
+  el.innerHTML=f.map(r=>{
+    const fc=C.find(x=>x.id===r.ct[0]);
+    const icon=fc?fc.i:"hand-heart";
+    const clabels=r.ct.map(cid=>{const x=C.find(z=>z.id===cid);return x?x.l:""}).filter(Boolean).join(" · ");
+    const bx=r.ct.map(cid=>{const x=C.find(z=>z.id===cid);if(!x)return"";return`<span class="bx" style="background:${x.c}10;color:${x.c};border:1px solid ${x.c}22"><i data-lucide="${x.i}" style="width:12px;height:12px;vertical-align:-2px;margin-right:4px"></i>${x.l}</span>`}).join("");
+
+    return`<div class="item${r.dn?" fin":""}" data-id="${r.id}">
+      <div class="ic"><i data-lucide="${icon}"></i></div>
+      <div class="item-body">
+        <div class="item-text">${r.t}</div>
+        <div class="item-cats">${clabels}</div>
+        <div class="item-detail">
+          <div class="dg">
+            <div class="di"><div class="di-l">Data</div><div class="di-v">${fd(r.dt)}</div></div>
+            <div class="di"><div class="di-l">Status</div><div class="di-v ${r.dn?"dn":"act"}">${r.dn?"Finalizado":"Orando"}</div></div>
+            <div class="di"><div class="di-l">Nome</div><div class="di-v${r.cn?"":" em"}">${r.cn||"Não informado"}</div></div>
+            <div class="di"><div class="di-l">Telefone</div><div class="di-v${r.cp?"":" em"}">${r.cp||"Não informado"}</div></div>
+            <div class="di fw"><div class="di-l">E-mail</div><div class="di-v${r.ce?"":" em"}">${r.ce||"Não informado"}</div></div>
+          </div>
+          <div class="badges-exp">${bx}</div>
+        </div>
+      </div>
+      <div class="item-right">
+        <button class="chk${r.dn?" on":""}" data-ck="${r.id}" title="${r.dn?"Reabrir":"Finalizar"}">✓</button>
+        <button class="dbtn" data-dl="${r.id}" title="Excluir">✕</button>
+      </div>
+    </div>`}).join("");
+
+  updateLockUI();
+  lucide.createIcons();
+}
+render();
+
+// ── EVENTS ──
+document.getElementById("sI").addEventListener("input",e=>{sq=e.target.value;render()});
+document.querySelector(".filters").addEventListener("click",e=>{const b=e.target.closest(".f-pill");if(!b)return;sf=b.dataset.f;document.querySelectorAll(".f-pill").forEach(x=>x.classList.remove("on"));b.classList.add("on");render()});
+document.getElementById("cR").addEventListener("click",e=>{const b=e.target.closest(".cat");if(!b)return;ac=b.dataset.c;render()});
+
+document.getElementById("lE").addEventListener("click",e=>{
+  const dl=e.target.closest("[data-dl]");
+  if(dl){e.stopPropagation();if(!unlocked){openPw();return}oCf(+dl.dataset.dl);return}
+  const ck=e.target.closest("[data-ck]");
+  if(ck){e.stopPropagation();if(!unlocked){openPw();return}const r=D.find(x=>x.id===+ck.dataset.ck);if(r){r.dn=!r.dn;sv();render()}return}
+  const it=e.target.closest(".item");
+  if(it)it.classList.toggle("open");
+});
+
+// ── LOCK / PASSWORD ──
+const pwOv=document.getElementById("pwO");
+const pwIn=document.getElementById("pwI");
+const pwErr=document.getElementById("pwErr");
+
+function openPw(){
+  pwIn.value="";pwErr.textContent="";pwIn.classList.remove("error");
+  pwOv.classList.add("open");
+  setTimeout(()=>pwIn.focus(),250);
+}
+function closePw(){pwOv.classList.remove("open")}
+
+function tryUnlock(){
+  if(pwIn.value===PASS){
+    unlocked=true;
+    closePw();
+    updateLockUI();
+  } else {
+    pwErr.textContent="Senha incorreta";
+    pwIn.classList.add("error");
+    setTimeout(()=>pwIn.classList.remove("error"),500);
+  }
+}
+
+document.getElementById("lockBtn").addEventListener("click",()=>{
+  if(unlocked){unlocked=false;updateLockUI()}
+  else{openPw()}
+});
+
+document.getElementById("pwC").addEventListener("click",closePw);
+pwOv.addEventListener("click",e=>{if(e.target===pwOv)closePw()});
+document.getElementById("pwOk").addEventListener("click",tryUnlock);
+pwIn.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();tryUnlock()}});
+
+// ── FAB ──
+document.getElementById("fab").addEventListener("click",()=>{
+  if(!unlocked){openPw();return}
+  oA();
+});
+
+// ── ADD MODAL ──
+const aO=document.getElementById("aO"),fC=document.getElementById("fC");
+function oA(){
+  fC.innerHTML=C.filter(c=>c.id!=="todos").map(c=>`<label class="cs-i" data-ci="${c.id}"><input type="checkbox" value="${c.id}"/>${c.i} ${c.l}</label>`).join("");
+  document.getElementById("fD").value=new Date().toISOString().split("T")[0];
+  ["fT","fN","fP","fE"].forEach(id=>document.getElementById(id).value="");
+  aO.classList.add("open");
+  setTimeout(()=>document.getElementById("fT").focus(),300);
+}
+function cA(){aO.classList.remove("open")}
+fC.addEventListener("click",e=>{const l=e.target.closest(".cs-i");if(!l)return;const cb=l.querySelector("input");cb.checked=!cb.checked;l.classList.toggle("sel",cb.checked);e.preventDefault()});
+document.getElementById("mX").addEventListener("click",cA);
+aO.addEventListener("click",e=>{if(e.target===aO)cA()});
+document.getElementById("aF").addEventListener("submit",e=>{
+  e.preventDefault();
+  const t=document.getElementById("fT").value.trim();
+  const cats=Array.from(fC.querySelectorAll("input:checked")).map(c=>c.value);
+  if(!t)return;if(!cats.length){alert("Selecione pelo menos uma categoria.");return}
+  D.unshift({id:ni(),t,ct:cats,cn:document.getElementById("fN").value.trim()||null,cp:document.getElementById("fP").value.trim()||null,ce:document.getElementById("fE").value.trim()||null,dt:document.getElementById("fD").value||new Date().toISOString().split("T")[0],dn:false});
+  sv();render();cA();
+});
+
+// ── CONFIRM DELETE ──
+const cOv=document.getElementById("cO");
+function oCf(id){di=id;const r=D.find(x=>x.id===id);document.getElementById("cPv").textContent=r?`"${r.t.substring(0,80)}${r.t.length>80?"...":""}"` :"";cOv.classList.add("open")}
+function cCf(){di=null;cOv.classList.remove("open")}
+document.getElementById("cC").addEventListener("click",cCf);
+cOv.addEventListener("click",e=>{if(e.target===cOv)cCf()});
+document.getElementById("cD").addEventListener("click",()=>{if(di!==null){D=D.filter(r=>r.id!==di);sv();render()}cCf()});
+
+// ── PWA INSTALL ──
+let deferredPrompt=null;
+const installBar=document.getElementById("installBar");
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.navigator.standalone;
+const isAndroid=window.matchMedia("(display-mode: browser)").matches&&/android/i.test(navigator.userAgent);
+
+// Show banner if not already installed
+function showInstallBar(){
+  if(!window.navigator.standalone&&!localStorage.getItem("pwa_dismissed")){
+    installBar.classList.add("show");
+    // move fab up so it's not hidden behind banner
+    document.getElementById("fab").style.bottom="88px";
+  }
+}
+
+// Android: catch install prompt
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault();deferredPrompt=e;showInstallBar();
+});
+
+// iOS: show if in Safari and not installed
+if(isIOS) showInstallBar();
+
+document.getElementById("installBtn").addEventListener("click",async()=>{
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const r=await deferredPrompt.userChoice;
+    if(r.outcome==="accepted"){installBar.classList.remove("show");document.getElementById("fab").style.bottom="";}
+    deferredPrompt=null;
+  } else {
+    // iOS: show instructions
+    document.getElementById("iosModal").classList.add("open");
+  }
+});
+
+document.getElementById("installClose").addEventListener("click",()=>{
+  installBar.classList.remove("show");
+  document.getElementById("fab").style.bottom="";
+  localStorage.setItem("pwa_dismissed","1");
+});
+document.getElementById("iosClose").addEventListener("click",()=>{
+  document.getElementById("iosModal").classList.remove("open");
+});
+document.getElementById("iosModal").addEventListener("click",e=>{
+  if(e.target===document.getElementById("iosModal"))document.getElementById("iosModal").classList.remove("open");
+});
+
+// Hide banner if already running as PWA
+if(window.navigator.standalone||window.matchMedia("(display-mode:standalone)").matches){
+  installBar.classList.remove("show");
+}
+lucide.createIcons();
+</script>
+</body>
+</html>
