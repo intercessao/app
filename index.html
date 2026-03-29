@@ -209,6 +209,18 @@
     /* locked state */
     .locked .chk{opacity:.4;pointer-events:none}
 
+    .ebtn{
+      background:none;border:none;cursor:pointer;
+      color:var(--text3);padding:2px;
+      border-radius:6px;transition:all .15s;line-height:1;opacity:0;
+      display:flex;align-items:center;justify-content:center;
+      width:24px;height:24px;
+    }
+    .ebtn svg{width:14px;height:14px}
+    .item:hover .ebtn{opacity:1}
+    .ebtn:hover{color:var(--navy);background:rgba(62,73,93,.1)}
+    .locked .ebtn{display:none}
+
     .dbtn{
       background:none;border:none;cursor:pointer;
       color:var(--text3);font-size:16px;padding:2px;
@@ -456,6 +468,7 @@
       .fab{width:48px;height:48px;font-size:22px;bottom:18px;right:14px}
       .dg{grid-template-columns:1fr}
       .dbtn{opacity:1}
+      .ebtn{opacity:1}
       .st{padding:5px 9px;font-size:10px}
       .f-pill{padding:6px 10px;font-size:10px}
       .cat{padding:5px 9px;font-size:9px}
@@ -747,6 +760,7 @@ function render(){
         </div>
       </div>
       <div class="item-right">
+        <button class="ebtn" data-ed="${r.id}" title="Editar"><i data-lucide="pencil"></i></button>
         <button class="chk${r.dn?" on":""}" data-ck="${r.id}" title="${r.dn?"Reabrir":"Finalizar"}">✓</button>
         <button class="dbtn" data-dl="${r.id}" title="Excluir">✕</button>
       </div>
@@ -763,6 +777,8 @@ document.querySelector(".filters").addEventListener("click",e=>{const b=e.target
 document.getElementById("cR").addEventListener("click",e=>{const b=e.target.closest(".cat");if(!b)return;ac=b.dataset.c;render()});
 
 document.getElementById("lE").addEventListener("click",e=>{
+  const ed=e.target.closest("[data-ed]");
+  if(ed){e.stopPropagation();if(!unlocked){openPw();return}const r=D.find(x=>x.id===+ed.dataset.ed);if(r)oA(r);return}
   const dl=e.target.closest("[data-dl]");
   if(dl){e.stopPropagation();if(!unlocked){openPw();return}oCf(+dl.dataset.dl);return}
   const ck=e.target.closest("[data-ck]");
@@ -811,16 +827,29 @@ document.getElementById("fab").addEventListener("click",()=>{
   oA();
 });
 
-// ── ADD MODAL ──
+// ── ADD/EDIT MODAL ──
 const aO=document.getElementById("aO"),fC=document.getElementById("fC");
-function oA(){
-  fC.innerHTML=C.filter(c=>c.id!=="todos").map(c=>`<label class="cs-i" data-ci="${c.id}"><input type="checkbox" value="${c.id}"/>${c.i} ${c.l}</label>`).join("");
-  document.getElementById("fD").value=new Date().toISOString().split("T")[0];
-  ["fT","fN","fP","fE"].forEach(id=>document.getElementById(id).value="");
+let editId=null;
+function oA(editItem){
+  editId=editItem?editItem.id:null;
+  const title=aO.querySelector(".mt h3");
+  const submitBtn=aO.querySelector(".btn-go");
+  title.textContent=editId?"Editar pedido":"Novo pedido";
+  submitBtn.textContent=editId?"Salvar alterações":"Adicionar pedido";
+  fC.innerHTML=C.filter(c=>c.id!=="todos").map(c=>{
+    const checked=editItem&&editItem.ct.includes(c.id);
+    return`<label class="cs-i${checked?" sel":" "}" data-ci="${c.id}"><input type="checkbox" value="${c.id}"${checked?" checked":""}/><i data-lucide="${c.i}" style="width:14px;height:14px;vertical-align:-2px;margin-right:2px"></i> ${c.l}</label>`;
+  }).join("");
+  document.getElementById("fD").value=editItem?editItem.dt:new Date().toISOString().split("T")[0];
+  document.getElementById("fT").value=editItem?editItem.t:"";
+  document.getElementById("fN").value=editItem&&editItem.cn?editItem.cn:"";
+  document.getElementById("fP").value=editItem&&editItem.cp?editItem.cp:"";
+  document.getElementById("fE").value=editItem&&editItem.ce?editItem.ce:"";
   aO.classList.add("open");
+  lucide.createIcons();
   setTimeout(()=>document.getElementById("fT").focus(),300);
 }
-function cA(){aO.classList.remove("open")}
+function cA(){aO.classList.remove("open");editId=null}
 fC.addEventListener("click",e=>{const l=e.target.closest(".cs-i");if(!l)return;const cb=l.querySelector("input");cb.checked=!cb.checked;l.classList.toggle("sel",cb.checked);e.preventDefault()});
 document.getElementById("mX").addEventListener("click",cA);
 aO.addEventListener("click",e=>{if(e.target===aO)cA()});
@@ -829,7 +858,19 @@ document.getElementById("aF").addEventListener("submit",e=>{
   const t=document.getElementById("fT").value.trim();
   const cats=Array.from(fC.querySelectorAll("input:checked")).map(c=>c.value);
   if(!t)return;if(!cats.length){alert("Selecione pelo menos uma categoria.");return}
-  D.unshift({id:ni(),t,ct:cats,cn:document.getElementById("fN").value.trim()||null,cp:document.getElementById("fP").value.trim()||null,ce:document.getElementById("fE").value.trim()||null,dt:document.getElementById("fD").value||new Date().toISOString().split("T")[0],dn:false});
+  if(editId!==null){
+    const r=D.find(x=>x.id===editId);
+    if(r){
+      r.t=t;r.ct=cats;
+      r.cn=document.getElementById("fN").value.trim()||null;
+      r.cp=document.getElementById("fP").value.trim()||null;
+      r.ce=document.getElementById("fE").value.trim()||null;
+      r.dt=document.getElementById("fD").value||r.dt;
+    }
+    editId=null;
+  } else {
+    D.unshift({id:ni(),t,ct:cats,cn:document.getElementById("fN").value.trim()||null,cp:document.getElementById("fP").value.trim()||null,ce:document.getElementById("fE").value.trim()||null,dt:document.getElementById("fD").value||new Date().toISOString().split("T")[0],dn:false});
+  }
   sv();render();cA();
 });
 
