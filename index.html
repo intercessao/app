@@ -220,6 +220,7 @@
     .item:hover .ebtn{opacity:1}
     .ebtn:hover{color:var(--navy);background:rgba(62,73,93,.1)}
     .locked .ebtn{display:none}
+    .locked .priv{display:none}
 
     .dbtn{
       background:none;border:none;cursor:pointer;
@@ -753,8 +754,8 @@ function render(){
             <div class="di"><div class="di-l">Data</div><div class="di-v">${fd(r.dt)}</div></div>
             <div class="di"><div class="di-l">Status</div><div class="di-v ${r.dn?"dn":"act"}">${r.dn?"Finalizado":"Orando"}</div></div>
             <div class="di"><div class="di-l">Nome</div><div class="di-v${r.cn?"":" em"}">${r.cn||"Não informado"}</div></div>
-            <div class="di"><div class="di-l">Telefone</div><div class="di-v${r.cp?"":" em"}">${r.cp||"Não informado"}</div></div>
-            <div class="di fw"><div class="di-l">E-mail</div><div class="di-v${r.ce?"":" em"}">${r.ce||"Não informado"}</div></div>
+            <div class="di priv"><div class="di-l">Telefone</div><div class="di-v${r.cp?"":" em"}">${r.cp||"Não informado"}</div></div>
+            <div class="di fw priv"><div class="di-l">E-mail</div><div class="di-v${r.ce?"":" em"}">${r.ce||"Não informado"}</div></div>
           </div>
           <div class="badges-exp">${bx}</div>
         </div>
