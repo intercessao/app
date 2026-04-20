@@ -1577,14 +1577,21 @@ function renderManual(){
   lucide.createIcons();
 }
 
+// ── SERVICE WORKER ──
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+
 // ── PWA INSTALL ──
 let deferredPrompt=null;
 const homeInstall=document.getElementById("homeInstall");
 const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.navigator.standalone;
+const isAndroid=/android/i.test(navigator.userAgent);
+const isMobile=isIOS||isAndroid||/mobile/i.test(navigator.userAgent);
 const isStandalone=window.navigator.standalone||window.matchMedia("(display-mode:standalone)").matches;
 
 function showInstallCard(){
-  if(!isStandalone&&!localStorage.getItem("pwa_dismissed")){
+  if(!isStandalone&&!localStorage.getItem("pwa_dismissed")&&isMobile){
     homeInstall.classList.add("show");
   }
 }
@@ -1609,7 +1616,8 @@ window.addEventListener("beforeinstallprompt",e=>{
   e.preventDefault();deferredPrompt=e;showInstallCard();
 });
 
-if(isIOS) showInstallCard();
+// Show on mobile (iOS shows immediately, Android shows after beforeinstallprompt or as fallback)
+if(isMobile) showInstallCard();
 
 document.getElementById("homeInstallBtn").addEventListener("click",triggerInstall);
 document.getElementById("homeInstallClose").addEventListener("click",hideInstallCard);
