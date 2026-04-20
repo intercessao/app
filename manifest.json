@@ -1,6 +1,6 @@
 {
-  "name": "Pedidos de Oração",
-  "short_name": "Oração",
+  "name": "Comunidade de Intercessão",
+  "short_name": "Intercessão",
   "description": "Intercessão da Vértice",
   "start_url": "./index.html",
   "display": "standalone",

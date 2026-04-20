@@ -84,6 +84,20 @@
     }
     .home-fv .ref{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:11px;color:#C5C0B5}
 
+    /* Envie um pedido button */
+    .home-pedido{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;max-width:400px;margin-top:20px;
+      padding:14px 24px;border-radius:var(--rr);
+      background:var(--navy);color:#fff;
+      font-family:inherit;font-size:13px;font-weight:600;
+      text-decoration:none;transition:all .2s;
+      box-shadow:0 2px 12px rgba(62,73,93,.2);
+    }
+    .home-pedido:hover{background:#333E50;transform:translateY(-1px);box-shadow:0 4px 16px rgba(62,73,93,.25)}
+    .home-pedido:active{transform:scale(.98)}
+    .home-pedido svg{width:16px;height:16px}
+
     /* Home install card */
     .home-install{
       display:none;width:100%;max-width:400px;
@@ -573,39 +587,112 @@
     .book-buy:hover{background:var(--navy);color:#fff}
     .book-buy svg{width:14px;height:14px}
 
-    /* ── INSTALL BANNER ── */
-    .install-bar{
-      display:none;
-      position:fixed;bottom:0;left:0;right:0;
+    /* Hide install card on desktop */
+    @media(min-width:481px){
+      .home-install{display:none!important}
+    }
+
+    /* ══════ MANUAL ══════ */
+    .man-container{max-width:600px;margin:0 auto;padding:14px 16px 0}
+    .man-list{display:flex;flex-direction:column;gap:0}
+    .man-item{
       background:var(--white);
-      border-top:1px solid var(--border);
-      padding:14px 20px;
-      z-index:250;
-      align-items:center;
-      gap:12px;
-      box-shadow:0 -4px 20px rgba(26,29,38,.06);
-      max-width:600px;
-      margin:0 auto;
+      border-bottom:1px solid var(--border);
+      cursor:pointer;transition:background .15s;
     }
-    .install-bar.show{display:flex}
-    .install-bar .ib-icon{font-size:28px;flex-shrink:0}
-    .install-bar .ib-icon svg{width:28px;height:28px;color:var(--sage)}
-    .install-bar .ib-text{flex:1;min-width:0}
-    .install-bar .ib-title{font-size:13px;font-weight:700;color:var(--text)}
-    .install-bar .ib-sub{font-size:11px;color:var(--text3);margin-top:1px}
-    .install-bar .ib-btn{
-      padding:9px 16px;border-radius:var(--rr);border:none;
-      background:var(--navy);color:#fff;
-      font-family:inherit;font-size:12px;font-weight:600;
-      cursor:pointer;white-space:nowrap;flex-shrink:0;
-      transition:all .2s;
+    .man-item:first-child{border-radius:var(--r) var(--r) 0 0}
+    .man-item:last-child{border-radius:0 0 var(--r) var(--r);border-bottom:none}
+    .man-item:only-child{border-radius:var(--r)}
+    .man-item:hover{background:#FAFAFE}
+    .man-head{
+      display:flex;align-items:center;gap:12px;
+      padding:14px;
     }
-    .install-bar .ib-btn:hover{background:#333E50}
-    .install-bar .ib-close{
-      background:none;border:none;cursor:pointer;
-      color:var(--text3);font-size:18px;padding:2px;
-      line-height:1;flex-shrink:0;
+    .man-icon{
+      width:36px;height:36px;min-width:36px;border-radius:50%;
+      background:var(--bg);border:1.5px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
     }
+    .man-icon svg{width:18px;height:18px;color:var(--navy)}
+    .man-title{
+      font-size:13px;color:var(--text);
+      flex:1;line-height:1.3;
+    }
+    .man-title .man-num{font-weight:800}
+    .man-title .man-label{font-weight:400}
+    .man-arrow{
+      flex-shrink:0;color:var(--text3);transition:transform .2s;
+    }
+    .man-arrow svg{width:16px;height:16px}
+    .man-item.open .man-arrow{transform:rotate(180deg)}
+    .man-content{
+      display:none;padding:0 14px 16px 58px;
+      font-size:12px;line-height:1.7;color:var(--text2);
+    }
+    .man-item.open .man-content{display:block}
+    .man-content h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;margin-top:22px}
+    .man-content h3:first-child{margin-top:0}
+    .man-content p{margin-bottom:8px;display:block}
+    .man-content strong{font-weight:700;color:var(--text)}
+    .man-content ul{margin-left:16px;margin-bottom:8px}
+    .man-content li{margin-bottom:6px}
+    .man-ref{margin-top:10px;font-size:11px;color:var(--navy);font-style:normal}
+    .man-ref-label{font-weight:700}
+    /* Journey steps */
+    .man-steps{display:flex;flex-direction:column;gap:0;margin:14px 0 8px;position:relative;padding-left:20px}
+    .man-steps::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--gold);border-radius:2px}
+    .man-step{position:relative;padding:10px 0 10px 18px}
+    .man-step::before{content:'';position:absolute;left:-18px;top:14px;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2.5px solid var(--white);box-shadow:0 0 0 2px var(--gold)}
+    .man-step-num{font-size:10px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+    .man-step-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+    .man-step-desc{font-size:11px;font-weight:400;color:var(--text2);line-height:1.5}
+    .man-fv{
+      margin-top:32px;text-align:center;
+      color:#D0CEC8;font-size:11px;font-style:italic;
+      line-height:1.7;padding:0 20px 20px;
+    }
+    .man-fv .ref{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:11px;color:#C5C0B5}
+
+    /* ══════ FAQ ══════ */
+    .faq-container{max-width:600px;margin:0 auto;padding:14px 16px 0}
+    .faq-intro{
+      font-size:12px;line-height:1.7;color:var(--text2);
+      margin-bottom:20px;padding:0 2px;
+    }
+    .faq-list{display:flex;flex-direction:column;gap:0}
+    .faq-item{
+      background:var(--white);
+      border-bottom:1px solid var(--border);
+      cursor:pointer;transition:background .15s;
+    }
+    .faq-item:first-child{border-radius:var(--r) var(--r) 0 0}
+    .faq-item:last-child{border-radius:0 0 var(--r) var(--r);border-bottom:none}
+    .faq-item:only-child{border-radius:var(--r)}
+    .faq-item:hover{background:#FAFAFE}
+    .faq-head{
+      display:flex;align-items:center;gap:12px;
+      padding:14px;
+    }
+    .faq-icon{
+      width:36px;height:36px;min-width:36px;border-radius:50%;
+      background:var(--bg);border:1.5px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .faq-icon svg{width:18px;height:18px;color:var(--navy)}
+    .faq-question{
+      font-size:13px;font-weight:700;color:var(--text);
+      flex:1;line-height:1.3;
+    }
+    .faq-arrow{
+      flex-shrink:0;color:var(--text3);transition:transform .2s;
+    }
+    .faq-arrow svg{width:16px;height:16px}
+    .faq-item.open .faq-arrow{transform:rotate(180deg)}
+    .faq-answer{
+      display:none;padding:0 14px 16px 62px;
+      font-size:12px;line-height:1.7;color:var(--text2);
+    }
+    .faq-item.open .faq-answer{display:block}
 
     /* iOS install modal */
     .ios-modal{
@@ -686,7 +773,24 @@
       <div class="home-card-icon"><i data-lucide="library"></i></div>
       <div class="home-card-label">Livros<br>Recomendados</div>
     </div>
+    <div class="home-card" onclick="goTo('faq')">
+      <div class="home-card-icon"><i data-lucide="message-circle-question"></i></div>
+      <div class="home-card-label">Perguntas<br>Frequentes</div>
+    </div>
+    <div class="home-card" onclick="goTo('manual')">
+      <div class="home-card-icon"><i data-lucide="book-marked"></i></div>
+      <div class="home-card-label">Manual do<br>Voluntário</div>
+    </div>
+    <div class="home-card" onclick="goTo('recursos')">
+      <div class="home-card-icon"><i data-lucide="folder-open"></i></div>
+      <div class="home-card-label">Recursos</div>
+    </div>
   </div>
+  <!-- Envie um pedido -->
+  <a class="home-pedido" href="https://intercessao.github.io/pedido/" target="_blank" rel="noopener">
+    <i data-lucide="send"></i>
+    <span>Envie um pedido de oração</span>
+  </a>
   <!-- Install card (inline on home) -->
   <div class="home-install" id="homeInstall">
     <div class="home-install-icon"><i data-lucide="download"></i></div>
@@ -781,18 +885,53 @@
   </div>
 </div>
 
-<button class="fab locked-fab" id="fab">+</button>
-
-<!-- Install banner -->
-<div class="install-bar" id="installBar">
-  <div class="ib-icon"><i data-lucide="hand-heart"></i></div>
-  <div class="ib-text">
-    <div class="ib-title">Adicionar à tela inicial</div>
-    <div class="ib-sub">Acesse como um app, sem navegador</div>
+<!-- ══════ FAQ SECTION ══════ -->
+<div class="section-view" id="faqView">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goHome()"><i data-lucide="arrow-left"></i></button>
+    <div class="back-title">Perguntas Frequentes</div>
   </div>
-  <button class="ib-btn" id="installBtn">Instalar</button>
-  <button class="ib-close" id="installClose">✕</button>
+  <div class="faq-container">
+    <div class="faq-intro">
+      Aqui você encontra as perguntas mais comuns sobre o ministério de intercessão da Vértice. Se tiver alguma dúvida que não está aqui, fale com a liderança do ministério.
+    </div>
+    <div class="faq-list" id="faqList"></div>
+    <div class="lit-fv">
+      "Peçam, e será dado a vocês; busquem, e encontrarão; batam, e a porta será aberta."
+      <span class="ref">Mateus 7:7 — NVI</span>
+    </div>
+  </div>
 </div>
+
+<!-- ══════ MANUAL DO VOLUNTÁRIO SECTION ══════ -->
+<div class="section-view" id="manualView">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goHome()"><i data-lucide="arrow-left"></i></button>
+    <div class="back-title">Manual do Voluntário</div>
+  </div>
+  <div class="man-container">
+    <div class="man-list" id="manList"></div>
+    <div class="lit-fv">
+      "Vocês receberam de graça; deem também de graça."
+      <span class="ref">Mateus 10:8 — NVI</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ RECURSOS SECTION ══════ -->
+<div class="section-view" id="recursosView">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goHome()"><i data-lucide="arrow-left"></i></button>
+    <div class="back-title">Recursos</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:40px 24px;text-align:center">
+    <div style="width:64px;height:64px;border-radius:50%;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:20px"><i data-lucide="hard-hat" style="width:28px;height:28px;color:var(--gold)"></i></div>
+    <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.5px;line-height:1.3;margin-bottom:8px">Conteúdo sendo<br>construído!</div>
+    <div style="font-size:13px;font-weight:500;color:var(--text3)">Volte em breve.</div>
+  </div>
+</div>
+
+<button class="fab locked-fab" id="fab">+</button>
 
 <!-- iOS install instructions -->
 <div class="ios-modal" id="iosModal">
@@ -888,6 +1027,9 @@ function goTo(view){
   document.getElementById("prayerView").classList.remove("active");
   document.getElementById("liturgyView").classList.remove("active");
   document.getElementById("booksView").classList.remove("active");
+  document.getElementById("faqView").classList.remove("active");
+  document.getElementById("manualView").classList.remove("active");
+  document.getElementById("recursosView").classList.remove("active");
   document.getElementById("fab").classList.remove("show");
 
   if(view==="prayer"){
@@ -900,6 +1042,15 @@ function goTo(view){
   } else if(view==="books"){
     document.getElementById("booksView").classList.add("active");
     renderBooks();
+  } else if(view==="faq"){
+    document.getElementById("faqView").classList.add("active");
+    renderFAQ();
+  } else if(view==="manual"){
+    document.getElementById("manualView").classList.add("active");
+    renderManual();
+  } else if(view==="recursos"){
+    document.getElementById("recursosView").classList.add("active");
+    lucide.createIcons();
   }
   currentView=view;
   window.scrollTo(0,0);
@@ -908,6 +1059,9 @@ function goHome(){
   document.getElementById("prayerView").classList.remove("active");
   document.getElementById("liturgyView").classList.remove("active");
   document.getElementById("booksView").classList.remove("active");
+  document.getElementById("faqView").classList.remove("active");
+  document.getElementById("manualView").classList.remove("active");
+  document.getElementById("recursosView").classList.remove("active");
   document.getElementById("fab").classList.remove("show");
   document.getElementById("homeView").style.display="flex";
   currentView="home";
@@ -1274,22 +1428,168 @@ document.getElementById("cC").addEventListener("click",cCf);
 cOv.addEventListener("click",e=>{if(e.target===cOv)cCf()});
 document.getElementById("cD").addEventListener("click",()=>{if(di!==null){D=D.filter(r=>r.id!==di);sv();render()}cCf()});
 
+// ══════ FAQ ══════
+const FAQ=[
+  {q:"O que é a Comunidade de Intercessão da Vértice?",a:"É o ministério de oração e intercessão da Igreja Vértice. Uma comunidade que se reúne regularmente para orar uns pelos outros, pela igreja e pelas necessidades que chegam até nós."},
+  {q:"O que move esse serviço à igreja?",a:"Assim, serve à igreja movido por compaixão para com os necessitados."},
+  {q:"Quem pode participar?",a:"Qualquer membro ou frequentador da Vértice que tenha desejo de orar e interceder. Não é necessário ter experiência prévia — apenas um coração disposto."},
+  {q:"Preciso de algum preparo espiritual antes de entrar?",a:"Não exigimos formação específica, mas recomendamos uma vida devocional pessoal ativa. A leitura da Bíblia, a oração pessoal e a disposição de aprender são os melhores preparos."},
+  {q:"Quando e onde acontecem os encontros?",a:"Os encontros acontecem semanalmente em dia e horário definidos pela liderança. Os detalhes são compartilhados nos canais internos do ministério."},
+  {q:"Como funciona o encontro de intercessão?",a:"Seguimos uma liturgia com momentos de invocação, silêncio, adoração, confissão, ação de graças, intercessão pela igreja, pelos pedidos recebidos, intercessão mútua e oração de entrega. Tudo com ordem, reverência e liberdade no Espírito."},
+  {q:"Posso enviar um pedido de oração mesmo sem participar dos encontros?",a:"Sim. Qualquer pessoa pode enviar pedidos de oração. Eles serão acolhidos com seriedade, sigilo e levados ao grupo de intercessão."},
+  {q:"Os pedidos de oração são sigilosos?",a:"Sim. Todos os pedidos são tratados com total respeito e confidencialidade. Apenas os intercessores ativos têm acesso às informações, e há um compromisso de discrição."},
+  {q:"Vocês oram só por pessoas da igreja?",a:"Não. Recebemos pedidos de qualquer pessoa, dentro ou fora da Vértice. Nosso desejo é servir a todos com oração."},
+  {q:"Qual é a base bíblica para esse ministério?",a:"A intercessão é um dos chamados mais claros da Escritura. Textos como 1 Timóteo 2:1, Tiago 5:16, Filipenses 4:6, Romanos 8:26 e muitos outros sustentam essa prática como essencial na vida da igreja."},
+  {q:"O que é a liturgia de intercessão?",a:"É a ordem do encontro. Uma sequência intencional de momentos que nos ajuda a entrar na presença de Deus com reverência, foco e profundidade. Ela guia desde a invocação do Espírito até a oração de entrega final."},
+  {q:"Por que seguir uma liturgia? Isso não limita o Espírito?",a:"Pelo contrário. A liturgia nos organiza para que possamos ouvir melhor. Ela cria espaço para o Espírito agir com ordem e beleza, como Paulo orienta em 1 Coríntios 14:40."},
+  {q:"Qual a diferença entre intercessão e oração pessoal?",a:"A oração pessoal é individual — você diante de Deus. A intercessão é orar em favor de outros. É se colocar no lugar do outro diante de Deus, carregando suas causas, dores e necessidades como se fossem suas."},
+  {q:"Posso participar mesmo sendo tímido ou introvertido?",a:"Com certeza. A intercessão não exige falar em público. Muitos intercessores oram em silêncio, em dupla ou escrevendo. O mais importante é o coração, não a performance."},
+  {q:"Como sei se tenho chamado para intercessão?",a:"Se você sente inclinação a orar por outros, se situações alheias tocam seu coração, se você se pega pedindo a Deus por pessoas mesmo sem que peçam — isso pode ser um sinal. Converse com a liderança para discernir melhor."},
+  {q:"O que são os livros recomendados?",a:"É uma lista de leituras curada pela liderança do ministério, com livros sobre oração, vida devocional, formação espiritual e intercessão. São recursos para aprofundar a caminhada de cada intercessor."},
+  {q:"Como posso crescer como intercessor?",a:"Participando fielmente dos encontros, mantendo uma vida devocional constante, lendo bons livros sobre oração e intercessão, e cultivando sensibilidade ao Espírito Santo no dia a dia."},
+  {q:"Existe algum compromisso ao participar?",a:"Sim. Pedimos regularidade nos encontros, sigilo sobre os pedidos de oração e disposição para servir com humildade. Não é um compromisso pesado — mas é sério."},
+  {q:"Como entro em contato com a liderança do ministério?",a:"Através dos canais internos da Vértice. Você pode falar com os líderes do ministério diretamente nos encontros ou pelos meios de comunicação da igreja."}
+];
+
+function renderFAQ(){
+  document.getElementById("faqList").innerHTML=FAQ.map((f,i)=>`
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-head">
+        <div class="faq-icon"><i data-lucide="message-circle-question"></i></div>
+        <div class="faq-question">${f.q}</div>
+        <div class="faq-arrow"><i data-lucide="chevron-down"></i></div>
+      </div>
+      <div class="faq-answer">${f.a}</div>
+    </div>
+  `).join("");
+  lucide.createIcons();
+}
+
+// ══════ MANUAL DO VOLUNTÁRIO ══════
+const MANUAL=[
+  {n:1,t:"Bem-vindos",i:"hand-heart",c:`<p>Estamos muito felizes pela sua decisão de servir a igreja com os dons e talentos que Deus te deu!</p>
+<p>A <strong>cultura de serviço</strong> da Vértice é parte essencial de uma jornada de crescimento espiritual saudável. Entendemos que ser voluntário é mais do que realizar tarefas. <strong>É uma prática que nos ajuda a ser mais parecidos com Jesus.</strong></p>
+<p>Servir é também praticar generosidade ao doar o seu tempo e disposição em favor dos outros. Conscientes desse compromisso e da responsabilidade que ele implica, estamos aqui para te auxiliar ao longo desta trilha e de toda a experiência de ser um voluntário em nossa igreja. Na Vértice, ninguém serve sozinho!</p>
+<h3>Conselhos iniciais</h3>
+<ul><li>Sugerimos que você sirva em apenas <strong>um ministério</strong>, a fim de que o seu serviço seja um ato de adoração excelente e alegre, sem sobrecarga.</li>
+<li>No entanto, se a sua escala for muito espaçada <em>(ex.: a cada dois meses)</em>, talvez faça sentido servir em outra área que precise de apoio.</li>
+<li>Todo voluntário da Vértice precisa <strong>ser membro da igreja e participar de uma comunidade</strong>, ou estar no processo para entrar em uma comunidade.</li></ul>`},
+  {n:2,t:"A Vértice",i:"church",c:`<p>Somos uma igreja que nasceu em fevereiro de 2022, inspirada pelo chamado de Jesus para fazermos discípulos que se pareçam com ele.</p>
+<p>Toda a cultura da Vértice é baseada em missão, visão e valores cujo objetivo é <strong>direcionar nossas vidas para a semelhança com Jesus</strong>.</p>
+<h3>Missão</h3>
+<p>Formar discípulos que organizam suas vidas em torno de estarem com Jesus, tornarem-se como Jesus e fazerem o que Jesus fez.</p>
+<h3>Visão</h3>
+<p>Ser uma igreja comprometida a praticar o caminho de Jesus em nossa cidade, a fim de que a vontade do Pai seja feita em Brasília como é no Céu.</p>
+<h3>Valores</h3>
+<p><strong>Graça generosa:</strong> Cremos que, assim como Deus nos alcançou com sua graça, derramada generosamente sobre nós por meio de Jesus, também podemos compartilhar generosamente dessa mesma graça, por meio do Espírito Santo, em nossos relacionamentos e ministérios.</p>
+<p><strong>Verdade revelada:</strong> Em tudo o que fazemos, partimos da convicção inabalável de que a Bíblia é a Palavra de Deus, revelada a nós para nos ensinar a viver segundo a vontade dele.</p>
+<p><strong>Cuidado comprometido:</strong> Queremos ser uma igreja onde todos cuidam e recebem cuidado. Buscamos promover ambientes onde esse cuidado acontece de forma intencional e dedicada.</p>
+<p><strong>Serviço sacrificial:</strong> O serviço é uma expressão prática do amor de Jesus em nós. Nosso exemplo de servo é o próprio Cristo, que se sacrificou em nosso favor.</p>`},
+  {n:3,t:"Formação Espiritual",i:"book-open",c:`<p>Na Vértice, entendemos que a vida cristã é uma jornada de transformação. Nosso <strong>objetivo não é só entender a Escritura corretamente</strong>, mas <strong>colocá-la em prática</strong> para, assim, nos <strong>tornarmos como Jesus.</strong></p>
+<h3>Estar com Jesus</h3>
+<p>Servir nos forma em humildade e dependência. Ao servir, somos confrontados em nossas limitações e nosso orgulho, a fim de reconhecermos nossa necessidade de Jesus. O serviço nos coloca em uma posição de vulnerabilidade, na qual aprendemos a depender mais do Espírito do que de nossa própria força.</p>
+<h3>Tornar-se como Jesus</h3>
+<p>Servir nos molda segundo o caráter de Cristo. O serviço não é apenas um reflexo de maturidade espiritual, mas <strong>um meio para alcançá-la.</strong> Quando servimos, lidamos com impaciência, frustração, vaidade e autossuficiência. E é exatamente nesse processo que somos transformados.</p>
+<h3>Fazer o que Jesus fez</h3>
+<p>Jesus lavou os pés dos discípulos, alimentou famintos, curou doentes, acolheu quem sofria. <strong>Servir é participar dessa missão.</strong> Ao colocarmos os nossos dons a serviço da igreja, nos tornamos sinais vivos do Reino de Deus.</p>`},
+  {n:4,t:"Nosso Servir",i:"heart-handshake",c:`<p><strong>Servir é viver como Jesus viveu.</strong> É reconhecer que nossa fé não se limita ao campo das ideias, mas se expressa radicalmente por meio do que realizamos. É colocar o amor em movimento de forma sacrificial, com o coração moldado pela graça, pela verdade e pelo cuidado.</p>
+<h3>Graça generosa</h3>
+<p>Porque recebemos <strong>sem merecer</strong>, servimos <strong>generosamente</strong>. Compartilhamos tempo, dons e recursos com alegria, sabendo que tudo o que temos veio de Deus.</p>
+<div class="man-ref"><span class="man-ref-label">Base bíblica:</span> Mateus 10:8</div>
+<h3>Verdade revelada</h3>
+<p>Servimos com fidelidade e integridade, <strong>fundados na Palavra.</strong> O serviço é uma expressão coerente e visível da verdade que cremos e vivemos. <strong>Servir é viver a fé de forma concreta</strong>, com coerência entre palavras e atitudes.</p>
+<div class="man-ref"><span class="man-ref-label">Base bíblica:</span> João 17:17</div>
+<h3>Cuidado comprometido</h3>
+<p>Servimos com dedic ação e amor pelos irmãos. Buscamos criar ambientes seguros e acolhedores onde todos se sintam valorizados e cuidados.</p>
+<div class="man-ref"><span class="man-ref-label">Base bíblica:</span> Gálatas 6:2</div>
+<h3>Serviço sacrificial</h3>
+<p>Servimos com o coração pronto a abrir mão de nossas próprias comodidades em prol do bem comum. Seguimos o exemplo de Cristo que se entregou completamente.</p>
+<div class="man-ref"><span class="man-ref-label">Base bíblica:</span> Marcos 10:45</div>`},
+  {n:5,t:"Sua Jornada",i:"compass",c:`<p>A jornada de cada voluntário é única e acompanhada pela liderança da Vértice.</p>
+<h3>Passos do Voluntariado</h3>
+<div class="man-steps">
+<div class="man-step"><div class="man-step-num">Passo 1</div><div class="man-step-title">Decisão</div><div class="man-step-desc">Sua decisão de servir e desejo de fazer parte do ministério.</div></div>
+<div class="man-step"><div class="man-step-num">Passo 2</div><div class="man-step-title">Conversa</div><div class="man-step-desc">Encontro com a liderança para entender seus dons e onde melhor servir.</div></div>
+<div class="man-step"><div class="man-step-num">Passo 3</div><div class="man-step-title">Compromisso</div><div class="man-step-desc">Compromisso formal e treinamento específico para sua área de serviço.</div></div>
+<div class="man-step"><div class="man-step-num">Passo 4</div><div class="man-step-title">Crescimento</div><div class="man-step-desc">Acompanhamento contínuo, crescimento espiritual e desenvolvimento como servo.</div></div>
+</div>
+<p>Na Vértice, ninguém serve sozinho. Estaremos com você em cada etapa desta trilha.</p>`},
+  {n:6,t:"Boas-vindas",i:"party-popper",c:`<h3>Conversa inicial</h3>
+<p>Um encontro com a liderança do ministério para conhecer você, entender seus dons, ministério de interesse e começar essa jornada juntos.</p>
+<h3>Termo de compromisso</h3>
+<p>Um acordo simples que explicita o compromisso com regularidade, valores da Vértice e disposição de crescer espiritualmente enquanto serve.</p>
+<h3>Treinamento inicial</h3>
+<p>Você será treinado nas especificidades do seu ministério, conhecerá os processos, pessoas envolvidas e como fazer bem o seu serviço.</p>`},
+  {n:7,t:"Na Prática",i:"lightbulb",c:`<p>Aqui estão as diretrizes para você servir bem nos domingos e encontros na Vértice:</p>
+<h3>Antes do encontro</h3>
+<ul><li>Chegue com 15 minutos de antecedência</li>
+<li>Prepare-se espiritualmente, mesmo que brevemente</li>
+<li>Revise o que precisa ser feito no seu ministério</li></ul>
+<h3>Durante o encontro</h3>
+<ul><li>Sirva com alegria e excelência</li>
+<li>Seja atencioso com as pessoas que chegam</li>
+<li>Trabalhe em equipe e comunique-se bem com seus companheiros</li>
+<li>Esteja disponível para ajudar além do que foi planejado</li></ul>
+<h3>Após o encontro</h3>
+<ul><li>Recolha materiais e deixe tudo organizado</li>
+<li>Ofereça-se para ajudar em outras necessidades</li>
+<li>Reflita sobre como foi sua experiência de serviço</li></ul>`},
+  {n:8,t:"Suporte",i:"users",c:`<p>Você não está sozinho! Contamos com estruturas de apoio para sua jornada:</p>
+<h3>Conversa com líder</h3>
+<p>Sua liderança está disponível para conversar sobre dúvidas, dificuldades, desejos de crescimento ou mudanças de ministério.</p>
+<h3>Encontros trimestrais</h3>
+<p>Reuniões do grupo de voluntários para comunhão, reflexão, oração e aprofundamento na formação espiritual.</p>
+<h3>Encontro anual</h3>
+<p>Um evento especial onde toda a equipe de voluntários se reúne para celebrar o ano, renovar compromissos e planejar o futuro.</p>`},
+  {n:9,t:"Código de Conduta",i:"shield-check",c:`<p>Como servos de Jesus na Vértice, nos comprometemos com:</p>
+<h3>Representar Jesus</h3>
+<p>Nossas palavras, atitudes e ações refletem o caráter de Cristo. Somos embaixadores da graça de Deus.</p>
+<h3>Servir com humildade</h3>
+<p>Reconhecemos que servimos porque fomos servidos primeiro. Não buscamos reconhecimento, mas a honra de Deus.</p>
+<h3>Relacionar-se com respeito</h3>
+<p>Tratamos todos com dignidade, consideração e genuíno interesse no bem do outro.</p>
+<h3>Manter ética</h3>
+<p>Agimos com integridade, sigilo quando necessário, e honestidade em todas as circunstâncias.</p>
+<h3>Zelar por ambiente seguro</h3>
+<p>Nos comprometemos a manter a Vértice como um espaço seguro, acolhedor e livre de qualquer forma de abuso ou discriminação.</p>
+<h3>Submeter-se à liderança</h3>
+<p>Reconhecemos a autoridade e sabedoria da liderança, buscando orientação e respeitando decisões tomadas.</p>`},
+  {n:10,t:"Dúvidas Frequentes",i:"message-circle-question",c:`<p><strong>Quanto tempo de compromisso é esperado?</strong> No mínimo 6 meses, mas esperamos longo prazo. Se precisar sair, comunique com antecedência à liderança.</p>
+<p><strong>Posso trocar de ministério?</strong> Sim! Converse com a liderança. Às vezes é bom explorar diferentes áreas antes de encontrar seu lugar.</p>
+<p><strong>O voluntariado interfere na minha vida pessoal?</strong> Não. Nosso objetivo é servir com alegria, não com sacrifício que desgaste você. Comunique suas limitações.</p>
+<p><strong>Há algum treinamento contínuo?</strong> Sim! Encontros, dicas e aprendizado acontecem regularmente para que você cresça no serviço.</p>
+<p><strong>Posso servir em mais de um ministério?</strong> Recomendamos começar com um. Depois de estar bem estabelecido, pode considerar outro se sentir chamado.</p>
+<p><strong>E se não conseguir comparecer a um domingo?</strong> Avise a liderança com antecedência. Entendemos que imprevistos acontecem.</p>
+<p><strong>Qual é o valor de ser voluntário?</strong> Nenhum! É uma doação de seu tempo e dons para a honra de Deus e bem da comunidade.</p>`}
+];
+
+function renderManual(){
+  document.getElementById("manList").innerHTML=MANUAL.map(m=>`
+    <div class="man-item" onclick="this.classList.toggle('open')">
+      <div class="man-head">
+        <div class="man-icon"><i data-lucide="${m.i}"></i></div>
+        <div class="man-title"><span class="man-num">${m.n}.</span> <span class="man-label">${m.t}</span></div>
+        <div class="man-arrow"><i data-lucide="chevron-down"></i></div>
+      </div>
+      <div class="man-content">${m.c}</div>
+    </div>
+  `).join("");
+  lucide.createIcons();
+}
+
 // ── PWA INSTALL ──
 let deferredPrompt=null;
-const installBar=document.getElementById("installBar");
 const homeInstall=document.getElementById("homeInstall");
 const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.navigator.standalone;
 const isStandalone=window.navigator.standalone||window.matchMedia("(display-mode:standalone)").matches;
 
-function showInstallBar(){
+function showInstallCard(){
   if(!isStandalone&&!localStorage.getItem("pwa_dismissed")){
-    installBar.classList.add("show");
     homeInstall.classList.add("show");
   }
 }
 
-function hideInstallBar(){
-  installBar.classList.remove("show");
+function hideInstallCard(){
   homeInstall.classList.remove("show");
   localStorage.setItem("pwa_dismissed","1");
 }
@@ -1298,25 +1598,21 @@ async function triggerInstall(){
   if(deferredPrompt){
     deferredPrompt.prompt();
     const r=await deferredPrompt.userChoice;
-    if(r.outcome==="accepted"){hideInstallBar()}
+    if(r.outcome==="accepted"){hideInstallCard()}
     deferredPrompt=null;
-  } else {
+  } else if(isIOS){
     document.getElementById("iosModal").classList.add("open");
   }
 }
 
 window.addEventListener("beforeinstallprompt",e=>{
-  e.preventDefault();deferredPrompt=e;showInstallBar();
+  e.preventDefault();deferredPrompt=e;showInstallCard();
 });
 
-if(isIOS) showInstallBar();
+if(isIOS) showInstallCard();
 
-// Both install buttons (home card + bottom bar)
-document.getElementById("installBtn").addEventListener("click",triggerInstall);
 document.getElementById("homeInstallBtn").addEventListener("click",triggerInstall);
-
-document.getElementById("installClose").addEventListener("click",hideInstallBar);
-document.getElementById("homeInstallClose").addEventListener("click",hideInstallBar);
+document.getElementById("homeInstallClose").addEventListener("click",hideInstallCard);
 
 document.getElementById("iosClose").addEventListener("click",()=>{
   document.getElementById("iosModal").classList.remove("open");
@@ -1325,7 +1621,7 @@ document.getElementById("iosModal").addEventListener("click",e=>{
   if(e.target===document.getElementById("iosModal"))document.getElementById("iosModal").classList.remove("open");
 });
 
-if(isStandalone){hideInstallBar()}
+if(isStandalone){hideInstallCard()}
 lucide.createIcons();
 </script>
 </body>
