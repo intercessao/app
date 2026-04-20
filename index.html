@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-  <meta name="apple-mobile-web-app-title" content="Oração"/>
+  <meta name="apple-mobile-web-app-title" content="Intercessão"/>
   <meta name="theme-color" content="#FFFFFF"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="apple-touch-icon" href="icone.png"/>
   <link rel="icon" type="image/png" sizes="192x192" href="icone.png"/>
-  <title>Pedidos de Oração</title>
+  <title>Comunidade de Intercessão</title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -42,10 +42,101 @@
       padding-bottom:90px;
     }
 
-    /* ── HEADER ── */
+    /* ══════ HOME SCREEN ══════ */
+    .home{
+      display:flex;flex-direction:column;align-items:center;
+      padding:60px 20px 40px;
+      min-height:100vh;
+    }
+    .home-logo{width:36px;height:auto;opacity:0.5;margin-bottom:8px}
+    .home-title{
+      font-size:28px;font-weight:800;color:var(--text);
+      letter-spacing:-1px;text-align:center;line-height:1.15;
+    }
+    .home-sub{
+      font-size:12px;color:var(--text3);font-weight:500;
+      margin-top:4px;text-align:center;margin-bottom:36px;
+    }
+    .home-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:14px;
+      width:100%;max-width:400px;
+    }
+    .home-card{
+      background:var(--white);border:1.5px solid var(--border);
+      border-radius:16px;padding:28px 16px;
+      display:flex;flex-direction:column;align-items:center;
+      gap:12px;cursor:pointer;transition:all .2s;
+      text-decoration:none;color:var(--text);
+    }
+    .home-card:hover{border-color:var(--navy);transform:translateY(-2px);box-shadow:0 4px 16px rgba(62,73,93,.08)}
+    .home-card:active{transform:scale(.97)}
+    .home-card-icon{
+      width:48px;height:48px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--bg);border:1.5px solid var(--border);
+    }
+    .home-card-icon svg{width:22px;height:22px;color:var(--navy)}
+    .home-card-label{font-size:13px;font-weight:700;text-align:center;line-height:1.3}
+    .home-fv{
+      margin-top:40px;text-align:center;
+      color:#D0CEC8;font-size:11px;font-style:italic;
+      line-height:1.7;padding:0 20px;
+    }
+    .home-fv .ref{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:11px;color:#C5C0B5}
+
+    /* Home install card */
+    .home-install{
+      display:none;width:100%;max-width:400px;
+      margin-top:24px;padding:14px 16px;
+      background:var(--white);border:1.5px solid var(--border);
+      border-radius:var(--r);
+      align-items:center;gap:12px;
+    }
+    .home-install.show{display:flex}
+    .home-install-icon{flex-shrink:0}
+    .home-install-icon svg{width:22px;height:22px;color:var(--sage)}
+    .home-install-text{flex:1;min-width:0}
+    .home-install-title{font-size:13px;font-weight:700;color:var(--text)}
+    .home-install-sub{font-size:11px;color:var(--text3);margin-top:1px}
+    .home-install-btn{
+      padding:8px 16px;border-radius:var(--rr);border:none;
+      background:var(--navy);color:#fff;
+      font-family:inherit;font-size:12px;font-weight:600;
+      cursor:pointer;white-space:nowrap;flex-shrink:0;
+      transition:all .2s;
+    }
+    .home-install-btn:hover{background:#333E50}
+    .home-install-close{
+      background:none;border:none;cursor:pointer;
+      color:var(--text3);font-size:16px;padding:2px;
+      line-height:1;flex-shrink:0;
+    }
+
+    /* ══════ SECTION VIEWS ══════ */
+    .section-view{display:none}
+    .section-view.active{display:block}
+
+    /* Back bar */
+    .back-bar{
+      background:var(--white);
+      padding:48px 20px 14px;
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;gap:10px;
+    }
+    .back-btn{
+      background:var(--bg);border:1.5px solid var(--border);
+      width:34px;height:34px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:all .2s;flex-shrink:0;
+    }
+    .back-btn:hover{background:var(--border)}
+    .back-btn svg{width:16px;height:16px;color:var(--text2)}
+    .back-title{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.5px;flex:1}
+
+    /* ══════ HEADER (prayer section) ══════ */
     .hdr{
       background:var(--white);
-      padding:48px 20px 18px;
+      padding:0 20px 18px;
       border-bottom:1px solid var(--border);
     }
     .hdr-inner{max-width:600px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between}
@@ -206,7 +297,6 @@
       font-size:12px;color:transparent;transition:all .2s;padding:0;
     }
     .chk.on{border-color:var(--sage);background:var(--sage);color:#fff}
-    /* locked state */
     .locked .chk{opacity:.4;pointer-events:none}
 
     .ebtn{
@@ -265,7 +355,9 @@
       box-shadow:0 4px 20px rgba(62,73,93,.3);
       z-index:200;display:flex;align-items:center;justify-content:center;
       transition:all .2s;line-height:1;
+      display:none;
     }
+    .fab.show{display:flex}
     .fab:hover{transform:scale(1.06)}
     .fab:active{transform:scale(.94)}
     .fab.locked-fab{opacity:.35;pointer-events:none}
@@ -389,7 +481,97 @@
       color:#D0CEC8;font-size:11px;font-style:italic;
       line-height:1.7;padding:0 20px 20px;
     }
-    .fv .ref{display:block;margin-top:3px;font-style:normal;font-weight:600;font-size:9px;color:#DDD9D0}
+    .fv .ref{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:11px;color:#C5C0B5}
+
+    /* ══════ LITURGIA ══════ */
+    .lit-list{
+      max-width:600px;margin:0 auto;padding:14px 16px 0;
+      display:flex;flex-direction:column;gap:0;
+    }
+    .lit-item{
+      background:var(--white);
+      border-bottom:1px solid var(--border);
+      cursor:pointer;transition:background .15s;
+    }
+    .lit-item:first-child{border-radius:var(--r) var(--r) 0 0}
+    .lit-item:last-child{border-radius:0 0 var(--r) var(--r);border-bottom:none}
+    .lit-item:only-child{border-radius:var(--r)}
+    .lit-item:hover{background:#FAFAFE}
+    .lit-head{
+      display:flex;align-items:center;gap:12px;
+      padding:14px;
+    }
+    .lit-num{
+      width:36px;height:36px;min-width:36px;border-radius:50%;
+      background:var(--bg);border:1.5px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .lit-num svg{width:18px;height:18px;color:var(--navy)}
+    .lit-title{
+      font-size:13px;font-weight:700;color:var(--text);
+      flex:1;line-height:1.3;
+    }
+    .lit-arrow{
+      flex-shrink:0;color:var(--text3);transition:transform .2s;
+    }
+    .lit-arrow svg{width:16px;height:16px}
+    .lit-item.open .lit-arrow{transform:rotate(180deg)}
+    .lit-desc{
+      display:none;padding:0 14px 16px 58px;
+      font-size:12px;line-height:1.7;color:var(--text2);
+    }
+    .lit-item.open .lit-desc{display:block}
+    .lit-refs{margin-top:10px;font-size:11px;color:var(--navy);font-style:normal}
+    .lit-refs-label{font-weight:700}
+    .lit-fv{
+      margin-top:32px;text-align:center;
+      color:#D0CEC8;font-size:11px;font-style:italic;
+      line-height:1.7;padding:0 20px 20px;
+    }
+    .lit-fv .ref{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:11px;color:#C5C0B5}
+
+    /* ══════ BOOKS ══════ */
+    .books-container{max-width:600px;margin:0 auto;padding:14px 16px 0}
+    .books-sort{display:flex;align-items:center;gap:6px;margin-bottom:14px}
+    .books-sort-label{font-size:11px;font-weight:500;color:var(--text3)}
+    .books-sort-btn{
+      padding:5px 12px;border-radius:var(--rr);
+      border:1.5px solid var(--border);background:var(--white);
+      font-family:inherit;font-size:10px;font-weight:600;
+      color:var(--text2);cursor:pointer;transition:all .2s;
+    }
+    .books-sort-btn.active{background:var(--text);border-color:var(--text);color:var(--white)}
+    .books-list{display:flex;flex-direction:column;gap:12px}
+    .book-card{
+      background:var(--white);border:1.5px solid var(--border);
+      border-radius:var(--r);padding:16px;
+      display:flex;gap:14px;transition:all .2s;
+    }
+    .book-card:hover{border-color:rgba(62,73,93,.2);box-shadow:0 2px 10px rgba(26,29,38,.04)}
+    .book-cover{
+      width:80px;min-width:80px;height:120px;
+      border-radius:8px;overflow:hidden;
+      background:var(--bg);border:1px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .book-cover img{width:100%;height:100%;object-fit:cover}
+    .book-cover-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;text-align:center}
+    .book-cover-placeholder svg{width:24px;height:24px;color:var(--text3)}
+    .book-cover-placeholder span{font-size:8px;font-weight:600;color:var(--text3);line-height:1.2}
+    .book-info{flex:1;min-width:0;display:flex;flex-direction:column}
+    .book-author{font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+    .book-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px}
+    .book-synopsis{font-size:11px;line-height:1.6;color:var(--text2);flex:1}
+    .book-buy{
+      display:inline-flex;align-items:center;gap:5px;
+      margin-top:10px;padding:7px 16px;border-radius:var(--rr);
+      border:1.5px solid var(--navy);background:transparent;
+      color:var(--navy);font-family:inherit;font-size:11px;font-weight:600;
+      cursor:pointer;transition:all .2s;text-decoration:none;
+      align-self:flex-start;
+    }
+    .book-buy:hover{background:var(--navy);color:#fff}
+    .book-buy svg{width:14px;height:14px}
 
     /* ── INSTALL BANNER ── */
     .install-bar{
@@ -460,7 +642,12 @@
     .ios-close:hover{background:var(--border)}
 
     @media(max-width:480px){
-      .hdr{padding:40px 16px 14px}
+      .home{padding:48px 16px 32px}
+      .home-title{font-size:24px}
+      .home-grid{gap:10px}
+      .home-card{padding:22px 12px}
+      .back-bar{padding:40px 16px 12px}
+      .hdr{padding:0 16px 14px}
       .hdr h1{font-size:20px}
       .item{padding:12px 12px;gap:10px}
       .ic{width:34px;height:34px;min-width:34px;font-size:14px}
@@ -475,52 +662,122 @@
       .cat{padding:5px 9px;font-size:9px}
       .cat .ci{font-size:11px}
       .cat .cn{font-size:8px}
+      .lit-title{font-size:12px}
     }
   </style>
 </head>
 <body>
 
-<header class="hdr">
-  <div class="hdr-inner">
-    <div>
-      <div class="hdr-title-row">
-        <svg class="hdr-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 287.37 400"><path fill="#231f20" d="M281.79,0l-139.8,141.99L0,70.99,281.79,0ZM170,400l-21.73-249.95,53.04-53.87L287.37,8.78l-117.36,391.22Z"/></svg>
-        <div>
-          <h1>Pedidos de Oração</h1>
-          <div class="hdr-sub">Intercessão da Vértice</div>
-        </div>
-      </div>
-      <div class="stats">
-        <div class="st st-total"><span class="num" id="sT">0</span><span class="lbl">pedidos</span></div>
-        <div class="st st-pend"><span class="num" id="sP">0</span><span class="lbl">orando</span></div>
-        <div class="st st-done"><span class="num" id="sD">0</span><span class="lbl">finalizados</span></div>
-      </div>
+<!-- ══════ HOME SCREEN ══════ -->
+<div class="home" id="homeView">
+  <svg class="home-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 287.37 400"><path fill="#231f20" d="M281.79,0l-139.8,141.99L0,70.99,281.79,0ZM170,400l-21.73-249.95,53.04-53.87L287.37,8.78l-117.36,391.22Z"/></svg>
+  <div class="home-title">Comunidade<br>de Intercessão</div>
+  <div class="home-sub">Intercessão da Vértice</div>
+  <div class="home-grid">
+    <div class="home-card" onclick="goTo('prayer')">
+      <div class="home-card-icon"><i data-lucide="hand-heart"></i></div>
+      <div class="home-card-label">Pedidos de<br>Oração</div>
     </div>
+    <div class="home-card" onclick="goTo('liturgy')">
+      <div class="home-card-icon"><i data-lucide="book-open"></i></div>
+      <div class="home-card-label">Liturgia</div>
+    </div>
+    <div class="home-card" onclick="goTo('books')">
+      <div class="home-card-icon"><i data-lucide="library"></i></div>
+      <div class="home-card-label">Livros<br>Recomendados</div>
+    </div>
+  </div>
+  <!-- Install card (inline on home) -->
+  <div class="home-install" id="homeInstall">
+    <div class="home-install-icon"><i data-lucide="download"></i></div>
+    <div class="home-install-text">
+      <div class="home-install-title">Adicionar à tela inicial</div>
+      <div class="home-install-sub">Acesse como um app, sem navegador</div>
+    </div>
+    <button class="home-install-btn" id="homeInstallBtn">Instalar</button>
+    <button class="home-install-close" id="homeInstallClose">✕</button>
+  </div>
+
+  <div class="home-fv">
+    "Onde dois ou três estiverem reunidos em meu nome, ali eu estou no meio deles."
+    <span class="ref">Mateus 18:20 — NVI</span>
+  </div>
+</div>
+
+<!-- ══════ PRAYER SECTION ══════ -->
+<div class="section-view" id="prayerView">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goHome()"><i data-lucide="arrow-left"></i></button>
+    <div class="back-title">Pedidos de Oração</div>
     <button class="lock-btn" id="lockBtn" title="Desbloquear edição"><i data-lucide="lock"></i></button>
   </div>
-</header>
-
-<div class="cnt">
-  <div class="search-row">
-    <div class="search-box">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" placeholder="Buscar por nome ou palavra-chave..." id="sI"/>
+  <div class="hdr">
+    <div class="hdr-inner">
+      <div>
+        <div class="stats">
+          <div class="st st-total"><span class="num" id="sT">0</span><span class="lbl">pedidos</span></div>
+          <div class="st st-pend"><span class="num" id="sP">0</span><span class="lbl">orando</span></div>
+          <div class="st st-done"><span class="num" id="sD">0</span><span class="lbl">finalizados</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="filters">
-    <button class="f-pill on" data-f="all">Todos</button>
-    <button class="f-pill" data-f="pending">Orando</button>
-    <button class="f-pill" data-f="done">Finalizados</button>
+  <div class="cnt">
+    <div class="search-row">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Buscar por nome ou palavra-chave..." id="sI"/>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button class="f-pill on" data-f="all">Todos</button>
+      <button class="f-pill" data-f="pending">Orando</button>
+      <button class="f-pill" data-f="done">Finalizados</button>
+    </div>
+
+    <div class="cats" id="cR"></div>
+    <div class="sec" id="sH"><span class="ci"></span><h2></h2><span class="sc"></span></div>
+    <div class="list" id="lE"></div>
+
+    <div class="fv">
+      "Não andem ansiosos por coisa alguma, mas em tudo, pela oração e súplicas, com ação de graças, apresentem seus pedidos a Deus."
+      <span class="ref">Filipenses 4:6 — NVI</span>
+    </div>
   </div>
+</div>
 
-  <div class="cats" id="cR"></div>
-  <div class="sec" id="sH"><span class="ci"></span><h2></h2><span class="sc"></span></div>
-  <div class="list" id="lE"></div>
+<!-- ══════ LITURGY SECTION ══════ -->
+<div class="section-view" id="liturgyView">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goHome()"><i data-lucide="arrow-left"></i></button>
+    <div class="back-title">Liturgia</div>
+  </div>
+  <div class="lit-list" id="litList"></div>
+  <div class="lit-fv">
+    "Orem continuamente."
+    <span class="ref">1 Tessalonicenses 5:17 — NVI</span>
+  </div>
+</div>
 
-  <div class="fv">
-    "Não andem ansiosos por coisa alguma, mas em tudo, pela oração e súplicas, com ação de graças, apresentem seus pedidos a Deus."
-    <span class="ref">Filipenses 4:6</span>
+<!-- ══════ BOOKS SECTION ══════ -->
+<div class="section-view" id="booksView">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goHome()"><i data-lucide="arrow-left"></i></button>
+    <div class="back-title">Livros Recomendados</div>
+  </div>
+  <div class="books-container">
+    <div class="books-sort">
+      <span class="books-sort-label">Ordenar por:</span>
+      <button class="books-sort-btn active" data-sort="author">Autor</button>
+      <button class="books-sort-btn" data-sort="title">Livro</button>
+    </div>
+    <div class="books-list" id="booksList"></div>
+    <div class="lit-fv">
+      "Aplique o coração ao ensino e os ouvidos às palavras de conhecimento."
+      <span class="ref">Provérbios 23:12 — NVI</span>
+    </div>
   </div>
 </div>
 
@@ -559,7 +816,7 @@
   </div>
 </div>
 
-<!-- Add modal -->
+<!-- Add/Edit modal -->
 <div class="ov" id="aO">
   <div class="modal">
     <div class="mh"></div>
@@ -624,6 +881,141 @@
 </div>
 
 <script>
+// ══════ NAVIGATION ══════
+let currentView="home";
+function goTo(view){
+  document.getElementById("homeView").style.display="none";
+  document.getElementById("prayerView").classList.remove("active");
+  document.getElementById("liturgyView").classList.remove("active");
+  document.getElementById("booksView").classList.remove("active");
+  document.getElementById("fab").classList.remove("show");
+
+  if(view==="prayer"){
+    document.getElementById("prayerView").classList.add("active");
+    document.getElementById("fab").classList.add("show");
+    render();
+  } else if(view==="liturgy"){
+    document.getElementById("liturgyView").classList.add("active");
+    renderLiturgy();
+  } else if(view==="books"){
+    document.getElementById("booksView").classList.add("active");
+    renderBooks();
+  }
+  currentView=view;
+  window.scrollTo(0,0);
+}
+function goHome(){
+  document.getElementById("prayerView").classList.remove("active");
+  document.getElementById("liturgyView").classList.remove("active");
+  document.getElementById("booksView").classList.remove("active");
+  document.getElementById("fab").classList.remove("show");
+  document.getElementById("homeView").style.display="flex";
+  currentView="home";
+  window.scrollTo(0,0);
+}
+
+// ══════ LITURGY ══════
+const LIT=[
+  {n:1,t:"Invocação do Espírito Santo",i:"flame",d:"Momento de abrir a reunião, convidando a presença, a direção e a condução do Espírito Santo sobre tudo o que será feito.",r:["João 14:26","Atos 1:8","Romanos 8:26"]},
+  {n:2,t:"Silêncio e Aquietação",i:"moon",d:"Tempo de quietude diante de Deus para acalmar a alma, silenciar distrações e cultivar atenção à sua presença.",r:["Salmos 46:10","Habacuque 2:20","1 Reis 19:11-12"]},
+  {n:3,t:"Adoração e Exaltação",i:"music",d:"Momento de glorificar quem Deus é, por meio de salmos, louvores e declarações que exaltam seu caráter, poder e santidade.",r:["Salmos 95:1-6","Salmos 150:1-6","Apocalipse 4:11"]},
+  {n:4,t:"Ação de Graças",i:"heart-handshake",d:"Tempo de reconhecer com gratidão tudo o que Deus tem feito, oferecendo palavras, salmos e cânticos de agradecimento.",r:["Salmos 100:4","1 Tessalonicenses 5:18","Colossenses 3:17"]},
+  {n:5,t:"Confissão e Arrependimento",i:"droplets",d:"Momento de autoexame, quebrantamento e confissão diante de Deus, com arrependimento pessoal e também coletivo.",r:["1 João 1:9","Salmos 51:10","2 Crônicas 7:14"]},
+  {n:6,t:"Intercessão pela Igreja",i:"church",d:"Tempo de orar pela Igreja, por sua santidade, unidade, fortalecimento, liderança e fidelidade à vontade de Deus.",r:["Efésios 4:1-6","João 17:20-23","Atos 2:42"]},
+  {n:7,t:"Intercessão pelos Pedidos de Oração",i:"scroll-text",d:"Momento dedicado a apresentar diante de Deus as causas, necessidades e pedidos recebidos pelo ministério.",r:["Filipenses 4:6","1 Timóteo 2:1","Tiago 5:16"]},
+  {n:8,t:"Intercessão Mútua",i:"users",d:"Tempo em que os participantes oram uns pelos outros, compartilhando cargas, fortalecendo vínculos e ministrando em amor.",r:["Gálatas 6:2","Romanos 15:1-2","Tiago 5:16"]},
+  {n:9,t:"Oração de Entrega",i:"hand-heart",d:"Momento final de render tudo ao Senhor, confiando a ele as orações feitas, os frutos do encontro e a continuidade da sua obra.",r:["Salmos 37:5","Provérbios 16:3","1 Pedro 5:7"]}
+];
+
+function renderLiturgy(){
+  document.getElementById("litList").innerHTML=LIT.map(l=>`
+    <div class="lit-item" onclick="this.classList.toggle('open')">
+      <div class="lit-head">
+        <div class="lit-num"><i data-lucide="${l.i}"></i></div>
+        <div class="lit-title">${l.t}</div>
+        <div class="lit-arrow"><i data-lucide="chevron-down"></i></div>
+      </div>
+      <div class="lit-desc">${l.d}<div class="lit-refs"><span class="lit-refs-label">Referência base:</span> ${l.r.join(" · ")}</div></div>
+    </div>
+  `).join("");
+  lucide.createIcons();
+}
+
+// ══════ BOOKS ══════
+const BOOKS=[
+  {a:"Brother Lawrence",t:"Praticando a Presença de Deus",s:"Um clássico sobre viver em comunhão com Deus nas tarefas mais comuns do dia a dia. O livro mostra que oração também pode acontecer no trabalho, no silêncio e na rotina. A proposta é transformar a vida inteira em presença consciente diante de Deus.",u:"https://www.amazon.com.br/dp/B08TCBHV4G"},
+  {a:"D. A. Carson",t:"O cristão verdadeiro",s:"Uma reflexão sobre maturidade cristã a partir da carta aos Filipenses. Carson mostra como crescer na graça sem superficialidade. É um livro sobre alegria, obediência e formação de caráter cristão.",u:"https://www.amazon.com.br/dp/8577422194"},
+  {a:"D. A. Carson",t:"Jesus, o Filho de Deus",s:"O autor explora o significado do título \"Filho de Deus\" aplicado a Jesus. Ele mostra por que essa expressão é central para a fé cristã. O livro ajuda a pensar Cristo com mais profundidade bíblica e teológica.",u:"https://www.amazon.com.br/dp/8527506092"},
+  {a:"D. A. Carson",t:"Manifestação do Espírito",s:"Um estudo sobre os dons espirituais à luz de 1 Coríntios 12–14. Carson trata o tema com seriedade bíblica e cautela teológica. É útil para quem quer pensar espiritualidade e dons sem exageros nem reducionismos.",u:"https://www.amazon.com.br/dp/8527505525"},
+  {a:"D. A. Carson",t:"O evangelho no centro",s:"O livro insiste que o evangelho não é apenas a porta de entrada da fé, mas o centro contínuo da vida cristã e do ministério. Chama a igreja de volta ao essencial. É uma obra sobre renovação, foco e fidelidade.",u:"https://www.amazon.com.br/dp/B08V36V3N8"},
+  {a:"Dallas Willard",t:"O escândalo do reino",s:"Uma leitura das parábolas de Jesus como anúncio radical do reino de Deus. O livro mostra que elas não são apenas histórias bonitas, mas convites a uma nova visão de realidade. A ênfase está na transformação interior e prática.",u:"https://www.amazon.com.br/dp/6552174373"},
+  {a:"Dallas Willard",t:"A conspiração divina",s:"Willard apresenta o discipulado como o centro da vida cristã. Ele argumenta que seguir Jesus envolve formação profunda do caráter, e não só crenças corretas. É um convite à vida no reino agora.",u:"https://www.amazon.com.br/dp/6556891940"},
+  {a:"Dallas Willard",t:"A gentileza que cativa",s:"Uma reflexão sobre como a mansidão e a bondade moldam a presença cristã no mundo. O livro aponta para a força espiritual que existe na vida humilde. É uma obra breve, mas muito formativa.",u:"https://www.amazon.com.br/dp/8543302811"},
+  {a:"Dallas Willard",t:"O espírito das disciplinas",s:"O autor explica por que as disciplinas espirituais importam na formação do discípulo. Elas não servem para merecer o amor de Deus, mas para abrir espaço à transformação. O foco é a cooperação prática com a graça.",u:"https://www.amazon.com.br/dp/B094FHRTYG"},
+  {a:"Dallas Willard",t:"A renovação do coração",s:"Um livro sobre transformação interior à semelhança de Cristo. Willard trabalha mente, vontade, emoções, corpo, relações e alma como dimensões da formação espiritual. É uma visão ampla e profunda da vida cristã.",u:"https://www.amazon.com.br/dp/8573254882"},
+  {a:"Henri Nouwen",t:"Espaço para Deus",s:"Um chamado a abrir silêncio, atenção e interioridade para Deus. Nouwen escreve de forma pastoral e contemplativa. O livro ajuda a desacelerar para escutar melhor.",u:"https://www.amazon.com.br/dp/8565419436"},
+  {a:"Henri Nouwen",t:"O caminho do coração",s:"Inspirado nos pais do deserto, o livro fala de solidão, silêncio e oração como caminhos de purificação do coração. É curto, mas muito denso. Mostra como a vida interior sustenta a missão.",u:"https://www.amazon.com.br/dp/8532644082"},
+  {a:"Henri Nouwen",t:"O curador ferido",s:"Nouwen mostra que o cuidado cristão não nasce da perfeição, mas da humanidade oferecida a Deus. A própria ferida pode se tornar lugar de compaixão e serviço. É um livro marcante sobre ministério e vulnerabilidade.",u:"https://www.amazon.com.br/dp/B0BL1Y5ZWK"},
+  {a:"John Mark Comer",t:"Praticando o caminho",s:"Um convite a reorganizar a vida para estar com Jesus, tornar-se parecido com ele e fazer o que ele faria. O livro traduz discipulado para a vida contemporânea. É muito prático e voltado à formação diária.",u:"https://www.amazon.com.br/dp/6552170378"},
+  {a:"John Mark Comer",t:"Deus tem um nome",s:"Comer parte de Êxodo 34 para refletir sobre o caráter de Deus. A proposta é corrigir visões distorcidas sobre quem Deus é. O livro insiste que conhecer o nome de Deus muda a forma de viver e amar.",u:"https://www.amazon.com.br/dp/6552172362"},
+  {a:"John Mark Comer",t:"Elimine a pressa",s:"Um chamado a resistir à pressa como força que deforma a alma. O autor relaciona velocidade, distração e esgotamento com perda de profundidade espiritual. É um convite a uma vida mais lenta, inteira e presente.",u:"https://www.amazon.com.br/dp/6555202211"},
+  {a:"John Mark Comer",t:"Viva sem mentiras",s:"O livro fala da batalha espiritual por trás das ideias, desejos e padrões do mundo. Comer organiza essa luta em torno de mentira, carne e diabo. A proposta é discernimento e liberdade em Cristo.",u:"https://www.amazon.com.br/dp/B0BVRRSLTC"},
+  {a:"N. T. Wright",t:"Surpreendido pela esperança",s:"Wright explica a esperança cristã a partir da ressurreição e da nova criação. Ele corrige a ideia de que o destino final do cristão é apenas \"ir para o céu\". O foco está no futuro de Deus e no sentido do presente.",u:"https://www.amazon.com.br/dp/6552173725"},
+  {a:"N. T. Wright",t:"Simplesmente Jesus",s:"Uma apresentação ampla da identidade e da missão de Jesus no contexto do seu tempo. Wright mostra como Jesus redefiniu expectativas sobre reino, poder e salvação. É um livro acessível e ao mesmo tempo muito rico.",u:"https://www.amazon.com.br/dp/8571671273"},
+  {a:"Paul Miller",t:"O poder de uma vida de oração",s:"Um livro muito prático sobre aprender a orar com honestidade, perseverança e dependência. Miller trata a oração menos como técnica e mais como relacionamento. É simples, pastoral e profundamente encorajador.",u:"https://www.amazon.com.br/dp/8527504537"},
+  {a:"Pedro Felizola",t:"Semelhança",s:"Um livro voltado à formação à imagem de Cristo. A ênfase está em identidade, transformação e vida com Deus. É uma leitura mais devocional e pastoral.",u:"https://www.amazon.com.br/dp/8554167295"},
+  {a:"Richard Foster",t:"Celebração da disciplina",s:"Um dos livros mais conhecidos sobre disciplinas espirituais. Foster apresenta práticas interiores, exteriores e comunitárias como caminhos de transformação. A ideia central é que graça e prática caminham juntas.",u:"https://www.amazon.com.br/dp/8538300156"},
+  {a:"Richard Foster",t:"Oração: o refúgio da alma",s:"Uma jornada ampla pelos muitos tipos de oração na tradição cristã. Foster mostra que orar envolve intimidade, cura, escuta, intercessão e rendição. O livro é acolhedor e formativo.",u:"https://www.amazon.com.br/dp/8538300350"},
+  {a:"Richard Foster",t:"Liberdade da simplicidade",s:"Uma reflexão sobre simplicidade como liberdade interior, não só como estilo externo de vida. Foster conecta consumo, ansiedade e desordem interior. O livro convida a uma vida mais leve, focada e íntegra.",u:"https://www.amazon.com.br/dp/8538300202"},
+  {a:"Richard Foster",t:"Rios de água viva",s:"Foster apresenta grandes correntes da espiritualidade cristã ao longo da história. O objetivo é mostrar a riqueza e a complementaridade dessas tradições. É um mapa útil para quem quer ampliar a visão da formação espiritual.",u:"https://www.amazon.com.br/dp/8538300776"},
+  {a:"Timothy Keller",t:"Oração: experimentando a intimidade com Deus",s:"Keller une reflexão bíblica, tradição cristã e prática pastoral para ensinar a orar. O livro trata tanto da beleza quanto da disciplina da oração. É equilibrado, inteligente e devocional ao mesmo tempo.",u:"https://www.amazon.com.br/dp/8527506815"},
+  {a:"Timothy Keller",t:"Ego transformado",s:"Uma obra breve sobre humildade e liberdade em relação ao próprio ego. Keller mostra como o evangelho confronta tanto orgulho quanto autodepreciação. É um livro curto, direto e muito impactante.",u:"https://www.amazon.com.br/dp/8527505924"},
+  {a:"Timothy Keller",t:"Deuses falsos",s:"Keller fala sobre ídolos do coração — coisas boas que tomam o lugar de Deus. O livro ajuda a identificar falsas fontes de identidade, segurança e sentido. É muito útil para autoconhecimento espiritual.",u:"https://www.amazon.com.br/dp/8527508796"},
+  {a:"Timothy Keller",t:"Caminhando com Deus em meio ao sofrimento",s:"Uma reflexão robusta e pastoral sobre dor, perda e esperança cristã. Keller não oferece respostas rasas, mas uma visão que sustenta em meio ao sofrimento. O foco é consolo com profundidade.",u:"https://www.amazon.com.br/dp/8527506696"},
+  {a:"Timothy Keller",t:"Encontros",s:"O livro percorre encontros de Jesus com pessoas nos evangelhos. Cada capítulo mostra como Cristo confronta, cura e transforma vidas concretas. É uma porta acessível para contemplar o caráter de Jesus.",u:"https://www.amazon.com.br/dp/852750622X"},
+  {a:"Tyler Staton",t:"Orando como monges, vivendo como tolos",s:"Staton defende uma vida de oração profunda, ousada e perseverante em meio ao mundo moderno. O livro une contemplação e expectativa pelo agir de Deus. É uma obra muito prática, mas com forte senso de mistério.",u:"https://www.amazon.com.br/dp/6552170955"}
+];
+
+let bookSort="author";
+function renderBooks(){
+  const sorted=[...BOOKS].sort((a,b)=>{
+    if(bookSort==="author"){
+      const ca=a.a.localeCompare(b.a,"pt");
+      return ca!==0?ca:a.t.localeCompare(b.t,"pt");
+    } else {
+      return a.t.localeCompare(b.t,"pt");
+    }
+  });
+  document.getElementById("booksList").innerHTML=sorted.map(b=>`
+    <div class="book-card">
+      <div class="book-cover">
+        <img src="https://m.media-amazon.com/images/P/${b.u.split('/dp/')[1]}.01._SCLZZZZZZZ_SX200_.jpg" alt="${b.t}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="book-cover-placeholder" style="display:none"><i data-lucide="book-open"></i><span>${b.a.split(' ').pop()}</span></div>
+      </div>
+      <div class="book-info">
+        <div class="book-author">${b.a}</div>
+        <div class="book-title">${b.t}</div>
+        <div class="book-synopsis">${b.s}</div>
+        <a class="book-buy" href="${b.u}" target="_blank" rel="noopener"><i data-lucide="shopping-cart"></i> Comprar</a>
+      </div>
+    </div>
+  `).join("");
+  // Update sort buttons
+  document.querySelectorAll(".books-sort-btn").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.sort===bookSort);
+  });
+  lucide.createIcons();
+}
+
+// Sort button events
+document.querySelector(".books-sort")?.addEventListener("click",e=>{
+  const btn=e.target.closest(".books-sort-btn");
+  if(!btn)return;
+  bookSort=btn.dataset.sort;
+  renderBooks();
+});
+
+// ══════ PRAYER DATA ══════
 const C=[
   {id:"todos",l:"Todos",i:"list",c:"#6A7765"},
   {id:"familia",l:"Família e Casamento",i:"church",c:"#8B6914"},
@@ -770,7 +1162,6 @@ function render(){
   updateLockUI();
   lucide.createIcons();
 }
-render();
 
 // ── EVENTS ──
 document.getElementById("sI").addEventListener("input",e=>{sq=e.target.value;render()});
@@ -886,43 +1277,47 @@ document.getElementById("cD").addEventListener("click",()=>{if(di!==null){D=D.fi
 // ── PWA INSTALL ──
 let deferredPrompt=null;
 const installBar=document.getElementById("installBar");
+const homeInstall=document.getElementById("homeInstall");
 const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.navigator.standalone;
-const isAndroid=window.matchMedia("(display-mode: browser)").matches&&/android/i.test(navigator.userAgent);
+const isStandalone=window.navigator.standalone||window.matchMedia("(display-mode:standalone)").matches;
 
-// Show banner if not already installed
 function showInstallBar(){
-  if(!window.navigator.standalone&&!localStorage.getItem("pwa_dismissed")){
+  if(!isStandalone&&!localStorage.getItem("pwa_dismissed")){
     installBar.classList.add("show");
-    // move fab up so it's not hidden behind banner
-    document.getElementById("fab").style.bottom="88px";
+    homeInstall.classList.add("show");
   }
 }
 
-// Android: catch install prompt
+function hideInstallBar(){
+  installBar.classList.remove("show");
+  homeInstall.classList.remove("show");
+  localStorage.setItem("pwa_dismissed","1");
+}
+
+async function triggerInstall(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const r=await deferredPrompt.userChoice;
+    if(r.outcome==="accepted"){hideInstallBar()}
+    deferredPrompt=null;
+  } else {
+    document.getElementById("iosModal").classList.add("open");
+  }
+}
+
 window.addEventListener("beforeinstallprompt",e=>{
   e.preventDefault();deferredPrompt=e;showInstallBar();
 });
 
-// iOS: show if in Safari and not installed
 if(isIOS) showInstallBar();
 
-document.getElementById("installBtn").addEventListener("click",async()=>{
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    const r=await deferredPrompt.userChoice;
-    if(r.outcome==="accepted"){installBar.classList.remove("show");document.getElementById("fab").style.bottom="";}
-    deferredPrompt=null;
-  } else {
-    // iOS: show instructions
-    document.getElementById("iosModal").classList.add("open");
-  }
-});
+// Both install buttons (home card + bottom bar)
+document.getElementById("installBtn").addEventListener("click",triggerInstall);
+document.getElementById("homeInstallBtn").addEventListener("click",triggerInstall);
 
-document.getElementById("installClose").addEventListener("click",()=>{
-  installBar.classList.remove("show");
-  document.getElementById("fab").style.bottom="";
-  localStorage.setItem("pwa_dismissed","1");
-});
+document.getElementById("installClose").addEventListener("click",hideInstallBar);
+document.getElementById("homeInstallClose").addEventListener("click",hideInstallBar);
+
 document.getElementById("iosClose").addEventListener("click",()=>{
   document.getElementById("iosModal").classList.remove("open");
 });
@@ -930,10 +1325,7 @@ document.getElementById("iosModal").addEventListener("click",e=>{
   if(e.target===document.getElementById("iosModal"))document.getElementById("iosModal").classList.remove("open");
 });
 
-// Hide banner if already running as PWA
-if(window.navigator.standalone||window.matchMedia("(display-mode:standalone)").matches){
-  installBar.classList.remove("show");
-}
+if(isStandalone){hideInstallBar()}
 lucide.createIcons();
 </script>
 </body>
