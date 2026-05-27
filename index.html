@@ -563,22 +563,25 @@
     }
     .book-card:hover{border-color:rgba(62,73,93,.2);box-shadow:0 2px 10px rgba(26,29,38,.04)}
     .book-cover{
-      width:80px;min-width:80px;height:120px;
+      width:80px;min-width:80px;
       border-radius:8px;overflow:hidden;
-      background:var(--bg);border:1px solid var(--border);
-      display:flex;align-items:center;justify-content:center;
+      align-self:flex-start;
+      background:transparent;
     }
-    .book-cover img{width:100%;height:100%;object-fit:cover}
-    .book-cover-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;text-align:center}
+    .book-cover img{
+      width:100%;height:auto;display:block;
+    }
+    .book-cover-placeholder{height:120px;border:1px solid var(--border);border-radius:8px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;text-align:center}
     .book-cover-placeholder svg{width:24px;height:24px;color:var(--text3)}
     .book-cover-placeholder span{font-size:8px;font-weight:600;color:var(--text3);line-height:1.2}
     .book-info{flex:1;min-width:0;display:flex;flex-direction:column}
     .book-author{font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
     .book-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px}
     .book-synopsis{font-size:11px;line-height:1.6;color:var(--text2);flex:1}
+    .book-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px}
     .book-buy{
       display:inline-flex;align-items:center;gap:5px;
-      margin-top:10px;padding:7px 16px;border-radius:var(--rr);
+      padding:7px 16px;border-radius:var(--rr);
       border:1.5px solid var(--navy);background:transparent;
       color:var(--navy);font-family:inherit;font-size:11px;font-weight:600;
       cursor:pointer;transition:all .2s;text-decoration:none;
@@ -586,6 +589,15 @@
     }
     .book-buy:hover{background:var(--navy);color:#fff}
     .book-buy svg{width:14px;height:14px}
+    .book-admin{
+      display:inline-flex;align-items:center;gap:4px;padding:7px 10px;
+      border-radius:var(--rr);border:1.5px solid var(--border);
+      background:var(--white);color:var(--text2);font-family:inherit;
+      font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;
+    }
+    .book-admin svg{width:13px;height:13px}
+    .book-admin:hover{border-color:var(--navy);color:var(--navy)}
+    .book-admin.delete:hover{border-color:#D64545;color:#D64545;background:#FDE8E8}
 
     /* Hide install card on desktop */
     @media(min-width:481px){
@@ -758,7 +770,7 @@
 <!-- ══════ HOME SCREEN ══════ -->
 <div class="home" id="homeView">
   <svg class="home-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 287.37 400"><path fill="#231f20" d="M281.79,0l-139.8,141.99L0,70.99,281.79,0ZM170,400l-21.73-249.95,53.04-53.87L287.37,8.78l-117.36,391.22Z"/></svg>
-  <div class="home-title">Comunidade<br>de Intercessão</div>
+  <div class="home-title">Time<br>de Intercessão</div>
   <div class="home-sub">Igreja Batista Vértice</div>
   <div class="home-grid">
     <div class="home-card" onclick="goTo('prayer')">
@@ -870,6 +882,7 @@
   <div class="back-bar">
     <button class="back-btn" onclick="goHome()"><i data-lucide="arrow-left"></i></button>
     <div class="back-title">Livros Recomendados</div>
+    <button class="lock-btn" id="booksLockBtn" title="Desbloquear edição"><i data-lucide="lock"></i></button>
   </div>
   <div class="books-container">
     <div class="books-sort">
@@ -992,6 +1005,54 @@
   </div>
 </div>
 
+<!-- Add book modal -->
+<div class="ov" id="bookO">
+  <div class="modal">
+    <div class="mh"></div>
+    <div class="mt"><h3>Nova recomendação</h3><button class="mx" id="bookX">✕</button></div>
+    <form id="bookF">
+      <div class="fg">
+        <label class="fg-l">Link de compra *</label>
+        <input class="fg-i" type="url" id="bookUrl" placeholder="https://..." required/>
+      </div>
+      <div class="fg">
+        <label class="fg-l">Nome do autor *</label>
+        <input class="fg-i" type="text" id="bookAuthor" placeholder="Nome do autor" required/>
+      </div>
+      <div class="fg">
+        <label class="fg-l">Nome do livro *</label>
+        <input class="fg-i" type="text" id="bookTitle" placeholder="Título do livro" required/>
+      </div>
+      <div class="fg">
+        <label class="fg-l">Sinopse *</label>
+        <textarea class="fg-t" id="bookSynopsis" placeholder="Breve apresentação do livro..." required></textarea>
+      </div>
+      <div class="fg">
+        <label class="fg-l">Link da imagem da capa</label>
+        <input class="fg-i" type="url" id="bookCoverUrl" placeholder="https://.../capa.jpg"/>
+      </div>
+      <div class="fg">
+        <label class="fg-l">Ou envie uma foto da capa</label>
+        <input class="fg-i" type="file" id="bookCover" accept="image/*"/>
+        <div class="fg-help" id="bookCoverHelp" style="font-size:10px;color:var(--text3);margin-top:5px"></div>
+      </div>
+      <button type="submit" class="btn-go">Adicionar recomendação</button>
+    </form>
+  </div>
+</div>
+
+<!-- Confirm book delete -->
+<div class="cov" id="bookDeleteO">
+  <div class="cbox">
+    <p>Excluir este livro recomendado?</p>
+    <small id="bookDeletePreview"></small>
+    <div class="ca">
+      <button class="ca-c" id="bookDeleteCancel">Cancelar</button>
+      <button class="ca-d" id="bookDeleteConfirm">Excluir</button>
+    </div>
+  </div>
+</div>
+
 <!-- Confirm delete -->
 <div class="cov" id="cO">
   <div class="cbox">
@@ -1041,6 +1102,7 @@ function goTo(view){
     renderLiturgy();
   } else if(view==="books"){
     document.getElementById("booksView").classList.add("active");
+    document.getElementById("fab").classList.add("show");
     renderBooks();
   } else if(view==="faq"){
     document.getElementById("faqView").classList.add("active");
@@ -1107,7 +1169,7 @@ const BOOKS=[
   {a:"Dallas Willard",t:"A gentileza que cativa",s:"Uma reflexão sobre como a mansidão e a bondade moldam a presença cristã no mundo. O livro aponta para a força espiritual que existe na vida humilde. É uma obra breve, mas muito formativa.",u:"https://www.amazon.com.br/dp/8543302811"},
   {a:"Dallas Willard",t:"O espírito das disciplinas",s:"O autor explica por que as disciplinas espirituais importam na formação do discípulo. Elas não servem para merecer o amor de Deus, mas para abrir espaço à transformação. O foco é a cooperação prática com a graça.",u:"https://www.amazon.com.br/dp/B094FHRTYG"},
   {a:"Dallas Willard",t:"A renovação do coração",s:"Um livro sobre transformação interior à semelhança de Cristo. Willard trabalha mente, vontade, emoções, corpo, relações e alma como dimensões da formação espiritual. É uma visão ampla e profunda da vida cristã.",u:"https://www.amazon.com.br/dp/8573254882"},
-  {a:"Henri Nouwen",t:"Espaço para Deus",s:"Um chamado a abrir silêncio, atenção e interioridade para Deus. Nouwen escreve de forma pastoral e contemplativa. O livro ajuda a desacelerar para escutar melhor.",u:"https://www.amazon.com.br/dp/8565419436"},
+  {a:"Henri Nouwen",t:"Espaço para Deus",s:"Um chamado a abrir silêncio, atenção e interioridade para Deus. Nouwen escreve de forma pastoral e contemplativa. O livro ajuda a desacelerar para escutar melhor.",u:"https://www.amazon.com.br/dp/8565419436",cover:"https://skoob.s3.amazonaws.com/livros/884616/ESPACO_PARA_DEUS_1560215480884616SK1560215481B.jpg"},
   {a:"Henri Nouwen",t:"O caminho do coração",s:"Inspirado nos pais do deserto, o livro fala de solidão, silêncio e oração como caminhos de purificação do coração. É curto, mas muito denso. Mostra como a vida interior sustenta a missão.",u:"https://www.amazon.com.br/dp/8532644082"},
   {a:"Henri Nouwen",t:"O curador ferido",s:"Nouwen mostra que o cuidado cristão não nasce da perfeição, mas da humanidade oferecida a Deus. A própria ferida pode se tornar lugar de compaixão e serviço. É um livro marcante sobre ministério e vulnerabilidade.",u:"https://www.amazon.com.br/dp/B0BL1Y5ZWK"},
   {a:"John Mark Comer",t:"Praticando o caminho",s:"Um convite a reorganizar a vida para estar com Jesus, tornar-se parecido com ele e fazer o que ele faria. O livro traduz discipulado para a vida contemporânea. É muito prático e voltado à formação diária.",u:"https://www.amazon.com.br/dp/6552170378"},
@@ -1130,9 +1192,68 @@ const BOOKS=[
   {a:"Tyler Staton",t:"Orando como monges, vivendo como tolos",s:"Staton defende uma vida de oração profunda, ousada e perseverante em meio ao mundo moderno. O livro une contemplação e expectativa pelo agir de Deus. É uma obra muito prática, mas com forte senso de mistério.",u:"https://www.amazon.com.br/dp/6552170955"}
 ];
 
-let bookSort="author";
+let bookSort="author",customBooks=[],bookEdits={},deletedBooks=[],editingBookId=null,deletingBookId=null;
+function loadBooks(){
+  try{
+    customBooks=JSON.parse(localStorage.getItem("intercessao_books_v1")||"[]").map((b,i)=>({...b,id:b.id||`custom-${Date.now()}-${i}`,custom:true}));
+    bookEdits=JSON.parse(localStorage.getItem("intercessao_book_edits_v1")||"{}");
+    deletedBooks=JSON.parse(localStorage.getItem("intercessao_book_deleted_v1")||"[]");
+  }catch(e){customBooks=[];bookEdits={};deletedBooks=[]}
+}
+function saveBooks(){
+  try{
+    localStorage.setItem("intercessao_books_v1",JSON.stringify(customBooks));
+    localStorage.setItem("intercessao_book_edits_v1",JSON.stringify(bookEdits));
+    localStorage.setItem("intercessao_book_deleted_v1",JSON.stringify(deletedBooks));
+  }catch(e){alert("Não foi possível salvar. Tente uma foto de capa menor.")}
+}
+function esc(value){return String(value||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function coverMarkup(b){
+  const hasImage=b.cover||!b.custom;
+  const fallback=`<div class="book-cover-placeholder"${hasImage?' style="display:none"':""}><i data-lucide="book-open"></i><span>${esc(b.a.split(" ").pop())}</span></div>`;
+  if(b.cover)return `<img src="${esc(b.cover)}" alt="${esc(b.t)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>${fallback}`;
+  if(b.custom)return fallback;
+  return `<img crossorigin="anonymous" src="https://m.media-amazon.com/images/P/${esc(b.u.split("/dp/")[1])}.01._SCLZZZZZZZ_SX200_.jpg" alt="${esc(b.t)}" onload="trimBookCover(this)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>${fallback}`;
+}
+function trimBookCover(img){
+  if(img.dataset.trimmed)return;
+  img.dataset.trimmed="1";
+  try{
+    const canvas=document.createElement("canvas"),w=img.naturalWidth,h=img.naturalHeight;
+    if(!w||!h)return;
+    canvas.width=w;canvas.height=h;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    ctx.drawImage(img,0,0);
+    const pixels=ctx.getImageData(0,0,w,h).data;
+    const blank=(x,y)=>{
+      const i=(y*w+x)*4;
+      return pixels[i+3]<20||(pixels[i]>246&&pixels[i+1]>246&&pixels[i+2]>246);
+    };
+    const blankRow=y=>{for(let x=0;x<w;x++)if(!blank(x,y))return false;return true};
+    const blankColumn=x=>{for(let y=0;y<h;y++)if(!blank(x,y))return false;return true};
+    let top=0,right=w-1,bottom=h-1,left=0;
+    while(top<bottom&&blankRow(top))top++;
+    while(bottom>top&&blankRow(bottom))bottom--;
+    while(left<right&&blankColumn(left))left++;
+    while(right>left&&blankColumn(right))right--;
+    if(top===0&&left===0&&right===w-1&&bottom===h-1)return;
+    const cropped=document.createElement("canvas");
+    cropped.width=right-left+1;cropped.height=bottom-top+1;
+    cropped.getContext("2d").drawImage(canvas,left,top,cropped.width,cropped.height,0,0,cropped.width,cropped.height);
+    img.src=cropped.toDataURL("image/jpeg",.92);
+  }catch(e){}
+}
+loadBooks();
+function getBooks(){
+  const originals=BOOKS.map((b,i)=>{
+    const id=`base-${i}`;
+    return {...b,...(bookEdits[id]||{}),id,custom:false};
+  }).filter(b=>!deletedBooks.includes(b.id));
+  return [...originals,...customBooks];
+}
+function findBook(id){return getBooks().find(b=>b.id===id)}
 function renderBooks(){
-  const sorted=[...BOOKS].sort((a,b)=>{
+  const sorted=getBooks().sort((a,b)=>{
     if(bookSort==="author"){
       const ca=a.a.localeCompare(b.a,"pt");
       return ca!==0?ca:a.t.localeCompare(b.t,"pt");
@@ -1143,14 +1264,16 @@ function renderBooks(){
   document.getElementById("booksList").innerHTML=sorted.map(b=>`
     <div class="book-card">
       <div class="book-cover">
-        <img src="https://m.media-amazon.com/images/P/${b.u.split('/dp/')[1]}.01._SCLZZZZZZZ_SX200_.jpg" alt="${b.t}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-        <div class="book-cover-placeholder" style="display:none"><i data-lucide="book-open"></i><span>${b.a.split(' ').pop()}</span></div>
+        ${coverMarkup(b)}
       </div>
       <div class="book-info">
-        <div class="book-author">${b.a}</div>
-        <div class="book-title">${b.t}</div>
-        <div class="book-synopsis">${b.s}</div>
-        <a class="book-buy" href="${b.u}" target="_blank" rel="noopener"><i data-lucide="shopping-cart"></i> Comprar</a>
+        <div class="book-author">${esc(b.a)}</div>
+        <div class="book-title">${esc(b.t)}</div>
+        <div class="book-synopsis">${esc(b.s)}</div>
+        <div class="book-actions">
+          <a class="book-buy" href="${esc(b.u)}" target="_blank" rel="noopener"><i data-lucide="shopping-cart"></i> Comprar</a>
+          ${booksUnlocked?`<button class="book-admin" data-book-edit="${esc(b.id)}"><i data-lucide="pencil"></i> Editar</button><button class="book-admin delete" data-book-delete="${esc(b.id)}"><i data-lucide="trash-2"></i> Excluir</button>`:""}
+        </div>
       </div>
     </div>
   `).join("");
@@ -1158,6 +1281,7 @@ function renderBooks(){
   document.querySelectorAll(".books-sort-btn").forEach(btn=>{
     btn.classList.toggle("active",btn.dataset.sort===bookSort);
   });
+  updateBooksLockUI();
   lucide.createIcons();
 }
 
@@ -1167,6 +1291,12 @@ document.querySelector(".books-sort")?.addEventListener("click",e=>{
   if(!btn)return;
   bookSort=btn.dataset.sort;
   renderBooks();
+});
+document.getElementById("booksList").addEventListener("click",e=>{
+  const edit=e.target.closest("[data-book-edit]");
+  if(edit){if(booksUnlocked)openBookForm(findBook(edit.dataset.bookEdit));return}
+  const del=e.target.closest("[data-book-delete]");
+  if(del&&booksUnlocked)openBookDelete(findBook(del.dataset.bookDelete));
 });
 
 // ══════ PRAYER DATA ══════
@@ -1224,7 +1354,7 @@ const DF=[
 ];
 
 // ── STATE ──
-let D=[],ac="todos",sf="all",sq="",di=null,unlocked=false;
+let D=[],ac="todos",sf="all",sq="",di=null,unlocked=false,booksUnlocked=false,unlockTarget="prayer";
 const PASS="vertice";
 
 function sv(){try{localStorage.setItem("pv6",JSON.stringify(D))}catch(e){}}
@@ -1252,6 +1382,20 @@ function updateLockUI(){
     fab.classList.add("locked-fab");
     list.classList.add("locked");
   }
+  lucide.createIcons();
+}
+function updateBooksLockUI(){
+  const btn=document.getElementById("booksLockBtn");
+  if(booksUnlocked){
+    btn.innerHTML='<i data-lucide="lock-open"></i>';
+    btn.classList.add("unlocked");
+    btn.title="Bloquear edição";
+  } else {
+    btn.innerHTML='<i data-lucide="lock"></i>';
+    btn.classList.remove("unlocked");
+    btn.title="Desbloquear edição";
+  }
+  if(currentView==="books")document.getElementById("fab").classList.toggle("locked-fab",!booksUnlocked);
   lucide.createIcons();
 }
 
@@ -1338,7 +1482,8 @@ const pwOv=document.getElementById("pwO");
 const pwIn=document.getElementById("pwI");
 const pwErr=document.getElementById("pwErr");
 
-function openPw(){
+function openPw(target="prayer"){
+  unlockTarget=target;
   pwIn.value="";pwErr.textContent="";pwIn.classList.remove("error");
   pwOv.classList.add("open");
   setTimeout(()=>pwIn.focus(),250);
@@ -1347,9 +1492,11 @@ function closePw(){pwOv.classList.remove("open")}
 
 function tryUnlock(){
   if(pwIn.value===PASS){
-    unlocked=true;
+    if(unlockTarget==="books")booksUnlocked=true;
+    else unlocked=true;
     closePw();
-    updateLockUI();
+    if(unlockTarget==="books")renderBooks();
+    else updateLockUI();
   } else {
     pwErr.textContent="Senha incorreta";
     pwIn.classList.add("error");
@@ -1359,7 +1506,11 @@ function tryUnlock(){
 
 document.getElementById("lockBtn").addEventListener("click",()=>{
   if(unlocked){unlocked=false;updateLockUI()}
-  else{openPw()}
+  else{openPw("prayer")}
+});
+document.getElementById("booksLockBtn").addEventListener("click",()=>{
+  if(booksUnlocked){booksUnlocked=false;renderBooks()}
+  else{openPw("books")}
 });
 
 document.getElementById("pwC").addEventListener("click",closePw);
@@ -1369,8 +1520,13 @@ pwIn.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();tryUn
 
 // ── FAB ──
 document.getElementById("fab").addEventListener("click",()=>{
-  if(!unlocked){openPw();return}
-  oA();
+  if(currentView==="books"){
+    if(!booksUnlocked){openPw("books");return}
+    openBookForm();
+  } else {
+    if(!unlocked){openPw("prayer");return}
+    oA();
+  }
 });
 
 // ── ADD/EDIT MODAL ──
@@ -1418,6 +1574,94 @@ document.getElementById("aF").addEventListener("submit",e=>{
     D.unshift({id:ni(),t,ct:cats,cn:document.getElementById("fN").value.trim()||null,cp:document.getElementById("fP").value.trim()||null,ce:document.getElementById("fE").value.trim()||null,dt:document.getElementById("fD").value||new Date().toISOString().split("T")[0],dn:false});
   }
   sv();render();cA();
+});
+
+// ── ADD BOOK MODAL ──
+const bookO=document.getElementById("bookO"),bookF=document.getElementById("bookF");
+function openBookForm(book=null){
+  editingBookId=book?book.id:null;
+  bookF.reset();
+  bookO.querySelector(".mt h3").textContent=book?"Editar recomendação":"Nova recomendação";
+  bookO.querySelector(".btn-go").textContent=book?"Salvar alterações":"Adicionar recomendação";
+  document.getElementById("bookCoverHelp").textContent=book?"Escolha uma imagem apenas se quiser substituir a capa atual.":"";
+  if(book){
+    document.getElementById("bookUrl").value=book.u||"";
+    document.getElementById("bookAuthor").value=book.a||"";
+    document.getElementById("bookTitle").value=book.t||"";
+    document.getElementById("bookSynopsis").value=book.s||"";
+    document.getElementById("bookCoverUrl").value=book.cover&&!book.cover.startsWith("data:")?book.cover:"";
+  }
+  bookO.classList.add("open");
+  setTimeout(()=>document.getElementById("bookUrl").focus(),300);
+}
+function closeBookForm(){bookO.classList.remove("open");editingBookId=null}
+function compactCover(file){
+  if(!file)return Promise.resolve(null);
+  return new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const scale=Math.min(1,420/img.width,630/img.height);
+        const canvas=document.createElement("canvas");
+        canvas.width=Math.max(1,Math.round(img.width*scale));
+        canvas.height=Math.max(1,Math.round(img.height*scale));
+        canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL("image/jpeg",.82));
+      };
+      img.onerror=()=>resolve(null);
+      img.src=reader.result;
+    };
+    reader.onerror=()=>resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+document.getElementById("bookX").addEventListener("click",closeBookForm);
+bookO.addEventListener("click",e=>{if(e.target===bookO)closeBookForm()});
+bookF.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const current=editingBookId?findBook(editingBookId):null;
+  const selectedFile=document.getElementById("bookCover").files[0];
+  const coverUrl=document.getElementById("bookCoverUrl").value.trim();
+  const cover=selectedFile?await compactCover(selectedFile):(coverUrl||(current&&current.cover?current.cover:null));
+  const values={
+    a:document.getElementById("bookAuthor").value.trim(),
+    t:document.getElementById("bookTitle").value.trim(),
+    s:document.getElementById("bookSynopsis").value.trim(),
+    u:document.getElementById("bookUrl").value.trim(),
+    cover
+  };
+  if(current&&current.custom){
+    customBooks=customBooks.map(b=>b.id===current.id?{...b,...values}:b);
+  } else if(current){
+    bookEdits[current.id]={...(bookEdits[current.id]||{}),...values};
+  } else {
+    customBooks.unshift({...values,id:`custom-${Date.now()}`,custom:true});
+  }
+  saveBooks();
+  renderBooks();
+  closeBookForm();
+});
+
+// ── DELETE BOOK ──
+const bookDeleteO=document.getElementById("bookDeleteO");
+function openBookDelete(book){
+  if(!book)return;
+  deletingBookId=book.id;
+  document.getElementById("bookDeletePreview").textContent=`"${book.t}" - ${book.a}`;
+  bookDeleteO.classList.add("open");
+}
+function closeBookDelete(){deletingBookId=null;bookDeleteO.classList.remove("open")}
+document.getElementById("bookDeleteCancel").addEventListener("click",closeBookDelete);
+bookDeleteO.addEventListener("click",e=>{if(e.target===bookDeleteO)closeBookDelete()});
+document.getElementById("bookDeleteConfirm").addEventListener("click",()=>{
+  const book=findBook(deletingBookId);
+  if(!book){closeBookDelete();return}
+  if(book.custom)customBooks=customBooks.filter(b=>b.id!==book.id);
+  else if(!deletedBooks.includes(book.id))deletedBooks.push(book.id);
+  saveBooks();
+  renderBooks();
+  closeBookDelete();
 });
 
 // ── CONFIRM DELETE ──
